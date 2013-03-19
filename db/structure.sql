@@ -101,7 +101,7 @@ CREATE TYPE user_status_enum AS ENUM (
 
 CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'maptile_for_point';
+    AS '/home/osm/openstreetmap-website/db/functions/libpgosm', 'maptile_for_point';
 
 
 --
@@ -110,16 +110,7 @@ CREATE FUNCTION maptile_for_point(bigint, bigint, integer) RETURNS integer
 
 CREATE FUNCTION tile_for_point(integer, integer) RETURNS bigint
     LANGUAGE c STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'tile_for_point';
-
-
---
--- Name: xid_to_int4(xid); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION xid_to_int4(xid) RETURNS integer
-    LANGUAGE c IMMUTABLE STRICT
-    AS '/srv/www/master.osm.compton.nu/db/functions/libpgosm.so', 'xid_to_int4';
+    AS '/home/osm/openstreetmap-website/db/functions/libpgosm', 'tile_for_point';
 
 
 SET default_tablespace = '';
@@ -218,8 +209,8 @@ CREATE TABLE client_applications (
     key character varying(50),
     secret character varying(50),
     user_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     allow_read_prefs boolean DEFAULT false NOT NULL,
     allow_write_prefs boolean DEFAULT false NOT NULL,
     allow_write_diary boolean DEFAULT false NOT NULL,
@@ -560,7 +551,7 @@ CREATE TABLE gps_points (
 --
 
 CREATE TABLE gpx_file_tags (
-    gpx_id bigint DEFAULT 0 NOT NULL,
+    gpx_id bigint DEFAULT 0::bigint NOT NULL,
     tag character varying(255) NOT NULL,
     id bigint NOT NULL
 );
@@ -708,8 +699,8 @@ CREATE TABLE oauth_nonces (
     id integer NOT NULL,
     nonce character varying(255),
     "timestamp" integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -745,8 +736,8 @@ CREATE TABLE oauth_tokens (
     secret character varying(50),
     authorized_at timestamp without time zone,
     invalidated_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     allow_read_prefs boolean DEFAULT false NOT NULL,
     allow_write_prefs boolean DEFAULT false NOT NULL,
     allow_write_diary boolean DEFAULT false NOT NULL,
@@ -818,11 +809,11 @@ ALTER SEQUENCE redactions_id_seq OWNED BY redactions.id;
 --
 
 CREATE TABLE relation_members (
-    relation_id bigint DEFAULT 0 NOT NULL,
+    relation_id bigint DEFAULT 0::bigint NOT NULL,
     member_type nwr_enum NOT NULL,
     member_id bigint NOT NULL,
     member_role character varying(255) NOT NULL,
-    version bigint DEFAULT 0 NOT NULL,
+    version bigint DEFAULT 0::bigint NOT NULL,
     sequence_id integer DEFAULT 0 NOT NULL
 );
 
@@ -832,7 +823,7 @@ CREATE TABLE relation_members (
 --
 
 CREATE TABLE relation_tags (
-    relation_id bigint DEFAULT 0 NOT NULL,
+    relation_id bigint DEFAULT 0::bigint NOT NULL,
     k character varying(255) DEFAULT ''::character varying NOT NULL,
     v character varying(255) DEFAULT ''::character varying NOT NULL,
     version bigint NOT NULL
@@ -844,7 +835,7 @@ CREATE TABLE relation_tags (
 --
 
 CREATE TABLE relations (
-    relation_id bigint DEFAULT 0 NOT NULL,
+    relation_id bigint DEFAULT 0::bigint NOT NULL,
     changeset_id bigint NOT NULL,
     "timestamp" timestamp without time zone NOT NULL,
     version bigint NOT NULL,
@@ -874,8 +865,8 @@ CREATE TABLE user_blocks (
     ends_at timestamp without time zone NOT NULL,
     needs_view boolean DEFAULT false NOT NULL,
     revoker_id bigint,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     reason_format format_enum DEFAULT 'html'::format_enum NOT NULL
 );
 
@@ -917,8 +908,8 @@ CREATE TABLE user_preferences (
 CREATE TABLE user_roles (
     id integer NOT NULL,
     user_id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     role user_role_enum NOT NULL,
     granter_id bigint NOT NULL
 );
@@ -1000,9 +991,9 @@ CREATE TABLE users (
     status user_status_enum DEFAULT 'pending'::user_status_enum NOT NULL,
     terms_agreed timestamp without time zone,
     consider_pd boolean DEFAULT false NOT NULL,
+    openid_url character varying(255),
     preferred_editor character varying(255),
     terms_seen boolean DEFAULT false NOT NULL,
-    openid_url character varying(255),
     description_format format_enum DEFAULT 'html'::format_enum NOT NULL,
     image_fingerprint character varying(255),
     changesets_count integer DEFAULT 0 NOT NULL,
@@ -1048,7 +1039,7 @@ CREATE TABLE way_nodes (
 --
 
 CREATE TABLE way_tags (
-    way_id bigint DEFAULT 0 NOT NULL,
+    way_id bigint DEFAULT 0::bigint NOT NULL,
     k character varying(255) NOT NULL,
     v character varying(255) NOT NULL,
     version bigint NOT NULL
@@ -1060,7 +1051,7 @@ CREATE TABLE way_tags (
 --
 
 CREATE TABLE ways (
-    way_id bigint DEFAULT 0 NOT NULL,
+    way_id bigint DEFAULT 0::bigint NOT NULL,
     changeset_id bigint NOT NULL,
     "timestamp" timestamp without time zone NOT NULL,
     version bigint NOT NULL,
