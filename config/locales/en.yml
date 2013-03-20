@@ -1145,6 +1145,7 @@ en:
       subject: "[OpenStreetMap] Welcome to OpenStreetMap"
       greeting: "Hi there!"
       created: "Someone (hopefully you) just created an account at %{site_url}."
+      wait_for_confirm: "We will notify you once your account has been confirmed."
       confirm: "Before we do anything else, we need to confirm that this request came from you, so if it did then please click the link below to confirm your account:"
       welcome: "We would like to welcome you and provide you with some additional information to get you started."
     signup_confirm_plain:

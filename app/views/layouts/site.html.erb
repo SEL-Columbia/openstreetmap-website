@@ -52,7 +52,9 @@
           <ul>
             <li><%= link_to(t('layouts.help_centre'), t('layouts.help_url'), :title => t('layouts.help_title')) %></li>
             <li><%= link_to(t('layouts.documentation'), t('layouts.wiki_url'), :title => t('layouts.documentation_title')) %></li>
+            <% if false %>
             <li><%= link_to t('layouts.copyright'), copyright_path %></li>
+            <% end %>
           </ul>
         </li>
         <li>
