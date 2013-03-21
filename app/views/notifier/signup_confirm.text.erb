@@ -2,6 +2,9 @@
 
 <%= fp(t("notifier.signup_confirm.created", :site_url => SERVER_URL)) %>
 
+<%= fp(t("notifier.signup_confirm.wait_for_confirm")) %>
+
+<% if false %>
 <%= fp(t("notifier.signup_confirm.welcome")) %>
 
 <%= fp(t("notifier.signup_confirm_plain.introductory_video")) %>
@@ -38,3 +41,4 @@
 <%= fp(t("notifier.signup_confirm_plain.current_user")) %>
 
   http://wiki.openstreetmap.org/wiki/Category:Users_by_geographical_region
+<% end %>

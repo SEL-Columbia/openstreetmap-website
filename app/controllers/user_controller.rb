@@ -123,6 +123,13 @@ class UserController < ApplicationController
       end
     else
       @user = session.delete(:new_user)
+      # In order for terms bypass to work we need to create user from params, not sesh
+      # TODO:  Verify correctness in face of OAuth/OpenID logic
+      if !@user and params[:user]
+        @user = User.new(params[:user])
+        @user.status = "pending"
+      end
+	
 
       if Acl.no_account_creation(request.remote_ip, @user.email.split("@").last)
         render :action => 'blocked'

@@ -2,6 +2,10 @@
 
 <p><%= t("notifier.signup_confirm.created", :site_url => SERVER_URL) %></p>
 
+<p><%= t 'notifier.signup_confirm.wait_for_confirm' %></p>
+
+<% # remove OSM details for now %>
+<% if false %>
 <p><%= t("notifier.signup_confirm.welcome") %></p>
 
 <p><%= raw(t("notifier.signup_confirm_html.introductory_video", :introductory_video_link => link_to(t('notifier.signup_confirm_html.video_to_openstreetmap'), "http://showmedo.com/videos/video?name=1800000&fromSeriesID=180"))) %>
@@ -16,3 +20,4 @@
 <p><%= raw(t("notifier.signup_confirm_html.user_wiki_page")) %></p> 
 
 <p><%= raw(t("notifier.signup_confirm_html.current_user")) %></p>
+<% end %>
