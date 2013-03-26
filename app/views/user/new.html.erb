@@ -6,8 +6,7 @@
 
 <%= error_messages_for 'user' %>
 
-<% # = form_for :user, :url => { :action => 'terms' } do %>
-<%= form_for :user, :url => { :action => 'save' } do %>
+<%= form_for :user, :url => { :action => 'terms' } do %>
   <%= hidden_field_tag('referer', h(@referer)) unless @referer.nil? %>
 
   <table id="signupForm">

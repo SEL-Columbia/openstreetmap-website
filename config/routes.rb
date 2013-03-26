@@ -110,8 +110,8 @@ OpenStreetMap::Application.routes.draw do
   match '/offline' => 'site#offline', :via => :get
   match '/key' => 'site#key', :via => :get
   match '/user/new' => 'user#new', :via => :get
-  # match '/user/terms' => 'user#terms', :via => [:get, :post]
-  match '/user/save' => 'user#save', :via => :post
+  match '/user/terms' => 'user#terms', :via => [:get, :post]
+  match '/user/save' => 'user#save', :via => [:get, :post]
   match '/user/:display_name/confirm/resend' => 'user#confirm_resend', :via => :get
   match '/user/:display_name/confirm' => 'user#confirm', :via => [:get, :post]
   match '/user/confirm' => 'user#confirm', :via => [:get, :post]

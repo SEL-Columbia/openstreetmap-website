@@ -17,7 +17,7 @@
       </div>
       <%= yield :optionals %>
       <% # Remove section for private instance %>
-      <% if false %> 
+      <% if !PRIVATE_INSTANCE %> 
       <% unless @user %>
       <div class="sidebar-copy intro">
         <p><%= t 'layouts.intro_1' %></p>
@@ -41,7 +41,7 @@
         <p><%= t 'layouts.osm_read_only' %></p>
       </div>
       <% end %>
-      <% if false %>
+      <% if !PRIVATE_INSTANCE %>
       <div class="sidebar-notice">
         <p><%= raw t 'layouts.donate', :link => "<a href=\"http://donate.openstreetmap.org/\">#{t('layouts.donate_link_text')}</a>" %></p>
       </div>
@@ -76,7 +76,7 @@
         <%= yield :left_menu %>
       </ul>
       <% # Remove section for private instance %>
-      <% if false %>
+      <% if !PRIVATE_INSTANCE %>
        <a title="<%= h(t('layouts.make_a_donation.title')) %>" href="http://donate.openstreetmap.org/" class="donate"> %>
         <span class='donate-icon'></span><p><%= h(t('layouts.make_a_donation.text')) %></p>
       </a>
