@@ -1,3 +1,5 @@
+require 'csv'
+
 class SearchController < ApplicationController
   # Support searching for nodes, ways, or all
   # Can search by tag k, v, or both (type->k,value->v)
@@ -22,6 +24,9 @@ class SearchController < ApplicationController
   def do_search(do_ways,do_nodes,do_relations)
     type = params['type']
     value = params['value']
+    keys = params['keys']
+    fmt = params['format']
+
     unless type or value
       name = params['name']
       if name
@@ -30,16 +35,18 @@ class SearchController < ApplicationController
       end
     end
 
-    if do_nodes
-      response.headers['Error'] = "Searching of nodes is currently unavailable"
-      render :nothing => true, :status => :service_unavailable
-      return false
-    end
+    if !PRIVATE_INSTANCE
+      if do_nodes
+        response.headers['Error'] = "Searching of nodes is currently unavailable"
+        render :nothing => true, :status => :service_unavailable
+        return false
+      end
 
-    unless value
-      response.headers['Error'] = "Searching for a key without value is currently unavailable"
-      render :nothing => true, :status => :service_unavailable
-      return false
+      unless value
+        response.headers['Error'] = "Searching for a key without value is currently unavailable"
+        render :nothing => true, :status => :service_unavailable
+        return false
+      end
     end
 
     # Matching for node tags table
@@ -47,7 +54,11 @@ class SearchController < ApplicationController
       nodes = Node.joins(:node_tags)
       nodes = nodes.where(:current_node_tags => { :k => type }) if type
       nodes = nodes.where(:current_node_tags => { :v => value }) if value
-      nodes = nodes.limit(100)
+      if !PRIVATE_INSTANCE
+        nodes = nodes.limit(100)
+      end
+      # This seems necessary to remove dup's manifested via join
+      nodes = nodes.uniq
     else
       nodes = Array.new
     end
@@ -74,7 +85,33 @@ class SearchController < ApplicationController
 
     # Fetch any node needed for our ways (only have matching nodes so far)
     nodes += Node.find(ways.collect { |w| w.nds }.uniq)
+   
+    if fmt and fmt == "csv"
+       field_keys = []
+       field_keys = keys.parse_csv if keys
+       output_csv(nodes, field_keys)
+    else
+       output_xml(nodes, ways, relations)
+    end
+  end
 
+  # Only support csv output of nodes for now
+  def output_csv(nodes, keys) 
+    # Print
+    base_fields = ["id","longitude","latitude","version"]
+    fields = base_fields + keys
+    csv_string = fields.to_csv
+    nodes.each do |node|
+      csv_string << node.to_csv_record(fields)
+    end
+
+    filename = "nodes_#{Date.today.strftime('%Y%m%d')}"
+    send_data csv_string, 
+      :type => 'text/csv; header=present', 
+      :disposition => "attachment; filename=#{filename}.csv"
+  end
+
+  def output_xml(nodes, ways, relations) 
     # Print
     visible_nodes = {}
     changeset_cache = {}

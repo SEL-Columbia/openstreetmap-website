@@ -1,5 +1,6 @@
 class Node < ActiveRecord::Base
   require 'xml/libxml'
+  require 'csv'
 
   include GeoRecord
   include ConsistencyValidations
@@ -240,6 +241,19 @@ class Node < ActiveRecord::Base
     el1['visible'] = self.visible.to_s
     el1['timestamp'] = self.timestamp.xmlschema
     return el1
+  end
+
+  def to_csv_record(fields = [])
+    
+    nd = self
+
+    # append all key/values as fields of nd
+    self.tags.each do |k, v|
+      nd[k] = v
+    end
+
+    values = fields.map { |field| nd[field] }
+    return values.to_csv
   end
 
   def tags_as_hash
