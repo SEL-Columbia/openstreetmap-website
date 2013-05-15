@@ -55,10 +55,19 @@ gem 'httpclient'
 # Load memcache in case we are using it
 gem 'memcached', '>= 1.4.1'
 
+# For osmlib
+gem 'GeoRuby'
+gem 'osmlib-base'
+gem 'osmlib-export' 
+
 # Gems needed for running tests
 group :test do
   gem 'timecop'
   gem 'minitest', :platforms => :ruby_19
+end
+
+group :development do
+  gem 'debugger'
 end
 
 # Gems needed for compiling assets

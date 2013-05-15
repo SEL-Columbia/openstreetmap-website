@@ -406,6 +406,89 @@ class ApplicationController < ActionController::Base
       format.all { render :nothing => true, :status => :not_found }
     end
   end
+  
+  ##
+  # Abstracted the osm map xml generation from the api_controller so that
+  # the xml can be used elsewhere (i.e. in export to other formats)
+  def map_xml(bbox)
+
+    @nodes = Node.bbox(bbox).where(:visible => true).includes(:node_tags).limit(MAX_NUMBER_OF_NODES+1)
+    # get all the nodes, by tag not yet working, waiting for change from NickB
+    # need to be @nodes (instance var) so tests in /spec can be performed
+    #@nodes = Node.search(bbox, params[:tag])
+
+    node_ids = @nodes.collect(&:id)
+    if node_ids.length > MAX_NUMBER_OF_NODES
+      report_error("You requested too many nodes (limit is #{MAX_NUMBER_OF_NODES}). Either request a smaller area, or use planet.osm")
+      return
+    end
+
+    doc = OSM::API.new.get_xml_doc
+
+    # add bounds
+    doc.root << bbox.add_bounds_to(XML::Node.new 'bounds')
+
+    # get ways
+    # find which ways are needed
+    ways = Array.new
+    if node_ids.length > 0
+      way_nodes = WayNode.find_all_by_node_id(node_ids)
+      way_ids = way_nodes.collect { |way_node| way_node.id[0] }
+      ways = Way.find(way_ids, :include => [:way_nodes, :way_tags])
+
+      list_of_way_nodes = ways.collect { |way|
+        way.way_nodes.collect { |way_node| way_node.node_id }
+      }
+      list_of_way_nodes.flatten!
+
+    else
+      list_of_way_nodes = Array.new
+    end
+
+    # - [0] in case some thing links to node 0 which doesn't exist. Shouldn't actually ever happen but it does. FIXME: file a ticket for this
+    nodes_to_fetch = (list_of_way_nodes.uniq - node_ids) - [0]
+
+    if nodes_to_fetch.length > 0
+      @nodes += Node.includes(:node_tags).find(nodes_to_fetch)
+    end
+
+    visible_nodes = {}
+    changeset_cache = {}
+    user_display_name_cache = {}
+
+    @nodes.each do |node|
+      if node.visible?
+        doc.root << node.to_xml_node(changeset_cache, user_display_name_cache)
+        visible_nodes[node.id] = node
+      end
+    end
+
+    way_ids = Array.new
+    ways.each do |way|
+      if way.visible?
+        doc.root << way.to_xml_node(visible_nodes, changeset_cache, user_display_name_cache)
+        way_ids << way.id
+      end
+    end 
+
+    relations = Relation.nodes(visible_nodes.keys).visible +
+                Relation.ways(way_ids).visible
+
+    # we do not normally return the "other" partners referenced by an relation, 
+    # e.g. if we return a way A that is referenced by relation X, and there's 
+    # another way B also referenced, that is not returned. But we do make 
+    # an exception for cases where an relation references another *relation*; 
+    # in that case we return that as well (but we don't go recursive here)
+    relations += Relation.relations(relations.collect { |r| r.id }).visible
+
+    # this "uniq" may be slightly inefficient; it may be better to first collect and output
+    # all node-related relations, then find the *not yet covered* way-related ones etc.
+    relations.uniq.each do |relation|
+      doc.root << relation.to_xml_node(nil, changeset_cache, user_display_name_cache)
+    end
+
+    doc
+  end
 
   ##
   # Unfortunately if a PUT or POST request that has a body fails to

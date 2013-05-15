@@ -35,4 +35,8 @@ class ExportControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  def test_finish_kml
+    get :finish, {:minlon => 0, :minlat => 50, :maxlon => 1, :maxlat => 51, :format => 'kml'}
+    assert_response :success
+  end
 end

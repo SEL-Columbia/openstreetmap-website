@@ -1,0 +1,82 @@
+# Override osmshape's KMLPlacemark _out method (doesn't output xml the way we want)
+class OSM::Export::KMLPlacemark
+
+    def _out(xml, style_id)
+        tags = @options[:description_tags]
+        if tags
+          doc = Builder::XmlMarkup.new()
+          table = doc.table do |xml|
+            tags.keys.each do |key|
+              xml.tr do
+                xml.td(key)
+                xml.td(tags[key])
+              end
+            end
+          end
+        end
+        
+        xml.Placemark(:id => @id) do
+            xml.name(@options[:name]) if @options[:name]
+            xml.description {|xml| xml.cdata!(table)} if tags
+            xml.Snippet(@options[:snippet]) if @options[:snippet]
+            xml.styleUrl("##{style_id}")
+            case @geometry
+                when GeoRuby::SimpleFeatures::Point
+                    xml.Point do
+                        xml.coordinates("#{@geometry.x},#{@geometry.y},#{@options[:height] || 0}")
+                    end
+                when GeoRuby::SimpleFeatures::LineString
+                    xml.LineString do
+                        xml.altitudeMode('relativeToGround')
+                        xml.coordinates(@geometry.points.collect{ |p| "#{p.x},#{p.y},#{@options[:height] || 0}" }.join(' '))
+                    end
+                when GeoRuby::SimpleFeatures::Polygon
+                    xml.Polygon do
+                        xml.altitudeMode('relativeToGround')
+                        xml.outerBoundaryIs do
+                            xml.LinearRing do
+                                xml.coordinates(@geometry.points.collect{ |p| "#{p.x},#{p.y},#{@options[:height] || 0}" }.join(' '))
+                            end
+                        end
+                    end
+                else
+                    raise ArgumentError.new('XXX')
+            end
+        end
+    end
+end
+
+setup :KML do
+  name 'OpenStreetMap'
+  description 'Raw nodes and ways'
+
+  folder :points do
+    style {}
+  end
+
+  folder :lines do
+    style {}
+  end
+end
+
+nodes do |node|
+  if power
+    names = tags.keys.grep /^name$|:name/
+    name = tags[names[0]]
+    desc_tags = {}
+    # copy only the tags we want in the description section
+    (tags.keys - [name]).each {|k| desc_tags[k] = tags[k]}
+         
+    if names.size > 0
+      :points << { :id => id, :name => name, :description_tags => desc_tags } 
+    else
+      :points << { :id => id, :description_tags => desc_tags  }
+    end
+  end
+end
+
+ways do
+  if nodes.size > 1
+    :lines <<  { :id => id, :description => power }
+  end
+end
