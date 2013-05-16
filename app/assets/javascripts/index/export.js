@@ -32,7 +32,7 @@ $(document).ready(function () {
 
     $("#add_marker").click(startMarker);
 
-    $("#format_osm,#format_mapnik,#format_html").click(formatChanged);
+    $("#format_osm,#format_kml,#format_mapnik,#format_html").click(formatChanged);
 
     $("#mapnik_scale").change(mapnikSizeChanged);
 
@@ -174,7 +174,7 @@ $(document).ready(function () {
       var max_scale = maxMapnikScale();
       var disabled = true;
 
-      if ($("#format_osm").prop("checked")) {
+      if ($("#format_osm").prop("checked") || $("#format_kml").prop("checked")) {
         disabled = tooLarge;
       } else if ($("#format_mapnik").prop("checked")) {
         disabled = $("#mapnik_scale").val() < max_scale;
@@ -225,11 +225,26 @@ $(document).ready(function () {
     function formatChanged() {
       $("#export_commit").show();
 
+      if ($("#format_osm").prop("checked") || $("#format_kml").prop("checked")) {
+        $("#export_osm").show();
+      } else {
+        $("#export_osm").hide();
+      }
+
+      /*
       if ($("#format_osm").prop("checked")) {
         $("#export_osm").show();
       } else {
         $("#export_osm").hide();
       }
+
+      //kml format displays same sub-div as osm xml format
+      if ($("#format_kml").prop("checked")) {
+        $("#export_kml").show();
+      } else {
+        $("#export_kml").hide();
+      }
+      */
 
       if ($("#format_mapnik").prop("checked")) {
         $("#mapnik_scale").val(getScale());

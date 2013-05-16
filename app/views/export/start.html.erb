@@ -19,8 +19,10 @@
   <ul class="export_details inner12">
     <li><%= radio_button_tag("format", "kml") %> <%= t'export.start.osm_kml_data' %></li>
     <li><%= radio_button_tag("format", "osm") %> <%= t'export.start.osm_xml_data' %></li>
+    <% if !PRIVATE_INSTANCE %>
     <li><%= radio_button_tag("format", "mapnik") %> <%= t'export.start.map_image' %></li>
     <li><%= radio_button_tag("format", "html") %> <%= t'export.start.embeddable_html' %></li>
+    <% end %>
   </ul>
 
   <div id="export_osm">
@@ -39,6 +41,7 @@
     </div>
   </div>
 
+  <% if !PRIVATE_INSTANCE %>
   <div id="export_mapnik">
     <h4><%= t'export.start.options' %></h4>
 
@@ -67,6 +70,7 @@
       <p class='deemphasize'><%= t'export.start.paste_html' %></p>
     </div>
   </div>
+  <% end %>
 
   <div class="export_buttons">
     <p><%= submit_tag t('export.start.export_button'), :id => "export_commit" %></p>
