@@ -38,9 +38,14 @@ $(document).ready(function () {
 
     openSidebar();
 
+    /*
+    Set default format to kml for now
+
     if (getMapBaseLayer().keyid == "mapnik") {
       $("#format_mapnik").prop("checked", true);
     }
+    */
+    $("#format_kml").prop("checked", true);
 
     setBounds(map.getBounds());
     formatChanged();
