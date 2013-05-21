@@ -68,7 +68,9 @@ class SearchController < ApplicationController
       ways = Way.joins(:way_tags)
       ways = ways.where(:current_way_tags => { :k => type }) if type
       ways = ways.where(:current_way_tags => { :v => value }) if value
-      ways = ways.limit(100)
+      if !PRIVATE_INSTANCE
+        ways = ways.limit(100)
+      end
     else
       ways = Array.new
     end
@@ -78,7 +80,9 @@ class SearchController < ApplicationController
       relations = Relation.joins(:relation_tags)
       relations = relations.where(:current_relation_tags => { :k => type }) if type
       relations = relations.where(:current_relation_tags => { :v => value }) if value
-      relations = relations.limit(2000)
+      if !PRIVATE_INSTANCE
+        relations = relations.limit(2000)
+      end
     else
       relations = Array.new
     end
