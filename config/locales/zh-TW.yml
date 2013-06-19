@@ -4,6 +4,7 @@
 # Author: Anakmalaysia
 # Author: Mmyangfl
 # Author: Pesder
+# Author: Shangkuanlc
 # Author: Simon Shek
 # Author: Wrightbus
 zh-TW: 
@@ -603,6 +604,8 @@ zh-TW:
           fitness_station: 健身站
           garden: 花園
           golf_course: 高爾夫球道
+          miniature_golf: 小型高爾夫球場
+          nature_reserve: 自然保護區
           park: 公園
           playground: 遊樂場
           recreation_ground: 遊樂場
@@ -875,8 +878,6 @@ zh-TW:
     email_confirm_plain: 
       click_the_link: 如果這是您，請按下列連結確認此變更。
       greeting: 您好，
-      hopefully_you_1: 有人 (希望是您) 想要改變他的電子郵件位址
-      hopefully_you_2: "%{server_url} 為 %{new_address}。"
     friend_notification: 
       befriend_them: 您可以在 %{befriendurl} 把他們加為朋友。
       had_added_you: "%{user} 已在 OpenStreetMap 將您加入為朋友。"
@@ -905,8 +906,6 @@ zh-TW:
     lost_password_plain: 
       click_the_link: 如果這是您，請按下列連結重設您的密碼。
       greeting: 您好，
-      hopefully_you_1: 有人 (希望是您) 要求重設這個電子郵件位址
-      hopefully_you_2: 的 openstreetmap.org 帳號密碼。
     message_notification: 
       footer1: 您也可以在 %{readurl} 閱讀訊息，
       footer2: 並在 %{replyurl} 回覆
@@ -1364,7 +1363,7 @@ zh-TW:
       openid no password: 使用 OpenID 時密碼不是必需的，但可能仍需要一些額外的工具或伺服器。
       password: 密碼：
       terms accepted: 感謝您接受新的貢獻條款！
-      title: 建立帳號
+      title: 建立帳戶
       use openid: 或者，使用 %{logo} OpenID 登入
     no_such_user: 
       body: 抱歉，沒有名為 %{user} 的使用者。請檢查您的拼字，或者可能是按到錯誤的連結。
