@@ -2031,6 +2031,7 @@ en:
     map:
       base:
         standard: Standard
+        gridmap: Grid Map
         cycle_map: Cycle Map
         transport_map: Transport Map
         mapquest: MapQuest Open

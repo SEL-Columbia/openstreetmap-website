@@ -114,6 +114,17 @@ function createMap(divName, options) {
 
   layers[0].layer.addTo(map);
 
+  // Add our own gridmap layer
+  grid_overlay = {
+       klass: L.OSM.GridMap,
+       attribution: "",
+       keyid: "gridmap",
+       layerCode: "G",
+       name: I18n.t("javascripts.map.base.gridmap")
+     };
+
+  layersControl.addOverlay(new (grid_overlay.klass)(grid_overlay), grid_overlay.name);
+
   $("#" + divName).on("resized", function () {
     map.invalidateSize();
   });
