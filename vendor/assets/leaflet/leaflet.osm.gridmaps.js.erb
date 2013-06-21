@@ -1,0 +1,8 @@
+//depends on leaflet.osm.js!!!
+L.OSM.GridMap = L.OSM.TileLayer.extend({
+  options: {
+    url: '<%= GRIDMAPS_TILE_URL %>',
+    maxZoom: 17,
+  }
+});
+

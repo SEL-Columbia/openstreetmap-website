@@ -38,13 +38,6 @@ L.OSM.MapQuestOpen = L.OSM.TileLayer.extend({
   }
 });
 
-L.OSM.GridMap = L.OSM.TileLayer.extend({
-  options: {
-    url: 'http://192.168.33.40:8000/pln/{z}/{x}/{y}.png',
-    maxZoom: 17,
-  }
-});
-
 L.OSM.DataLayer = L.FeatureGroup.extend({
   options: {
     areaTags: ['area', 'building', 'leisure', 'tourism', 'ruins', 'historic', 'landuse', 'military', 'natural', 'sport'],
