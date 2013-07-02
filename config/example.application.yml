@@ -3,12 +3,15 @@ defaults: &defaults
   server_url: "www.openstreetmap.org"
   # The generator
   generator: "OpenStreetMap server"
-  copyright_owner: "OpenStreetMap and contributors"
+  copyright_owner: "Modilabs"
   attribution_url: "http://www.openstreetmap.org/copyright"
   license_url: "http://opendatacommons.org/licenses/odbl/1-0/"
   # Sender addresses for emails
-  email_from: "OpenStreetMap <webmaster@openstreetmap.org>"
-  email_return_path: "bounces@openstreetmap.org"
+  email_from: "Modilabs OSM <osm.modilabs@gmail.com>"
+  email_return_path: "Modilabs OSM <osm.modilabs@gmail.com>"
+  mail_server: "smtp.gmail.com"
+  mail_username: "osm.modilabs@gmail.com"
+  mail_password: "<password>"
   # API version
   api_version: "0.6"
   # Application status - possible values are:
@@ -88,12 +91,19 @@ defaults: &defaults
   #piwik_location: "piwik.openstreetmap.org"
   #piwik_site: 1
   #piwik_signup_goal: 1
+  private_instance: false
 
 development:
   <<: *defaults
+  private_instance: true
+  gridmaps_tile_url:  "http://192.168.33.40:8000/pln/{z}/{x}/{y}.png"
+  gridmaps_utf_url:  "http://192.168.33.40:8000/pln_utfgrid/{z}/{x}/{y}.json"
 
 production:
   <<: *defaults
+  private_instance: true
+  gridmaps_tile_url:  "http://tiles.modilabs.org/pln/{z}/{x}/{y}.png"
+  gridmaps_utf_url:  "http://tiles.modilabs.org/pln_utfgrid/{z}/{x}/{y}.json"
 
 test:
   <<: *defaults
