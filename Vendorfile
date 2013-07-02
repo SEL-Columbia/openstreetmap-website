@@ -24,6 +24,10 @@ folder 'vendor/assets' do
     from 'git://github.com/jfirebaugh/leaflet-osm.git' do
       file 'leaflet.osm.js', 'leaflet-osm.js'
     end
+
+    from 'git://github.com/danzel/Leaflet.utfgrid.git' do
+      file 'leaflet.utfgrid.js', 'src/leaflet.utfgrid.js'
+    end
   end
 
   folder 'jquery' do
