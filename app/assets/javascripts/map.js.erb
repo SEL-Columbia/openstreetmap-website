@@ -125,6 +125,20 @@ function createMap(divName, options) {
 
   layersControl.addOverlay(new (grid_overlay.klass)(grid_overlay), grid_overlay.name);
 
+  // add utfgrid
+  var utfGrid = new L.UtfGrid('<%= GRIDMAPS_UTF_URL %>?callback={cb}');
+  // with leaflet popup
+  var popup = L.popup();
+
+  utfGrid.on('click', function (e) {
+    if (e.data.node_type) {
+      content = 'name: ' + e.data.name + '<br/>type: ' + e.data.node_type
+      popup.setLatLng(e.latlng).setContent(content).openOn(map);
+    }
+  });
+  
+  map.addLayer(utfGrid);
+
   $("#" + divName).on("resized", function () {
     map.invalidateSize();
   });
