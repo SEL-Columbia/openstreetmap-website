@@ -6,6 +6,7 @@
 //= require augment
 //= require leaflet
 //= require leaflet.osm
+//= require leaflet.utfgrid
 //= require leaflet.osm.gridmaps
 //= require leaflet.locationfilter
 //= require leaflet.pan
