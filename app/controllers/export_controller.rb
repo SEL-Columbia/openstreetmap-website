@@ -1,5 +1,7 @@
 require 'OSM/Export/KML'
 require 'geo_ruby'
+require 'net/http'
+require 'uri'
 
 # require 'securerandom'
 
@@ -23,7 +25,7 @@ class ExportController < ApplicationController
       redirect_to "/api/#{API_VERSION}/map?bbox=#{bbox}"
 
     elsif format == "kml"
-      uuid = SecureRandom.uuid
+      uuid = SecureRandom.hex
       rulefilename = File.join(Rails.root, 'config', 'base-kml.oxr')
       outfilename = [uuid, "grid.kml"].join("_")
       osmfilename = [uuid, "grid.osm"].join("_")
@@ -34,11 +36,25 @@ class ExportController < ApplicationController
       mapper = OSM::Export::KML.new(tmp_outfilename)
       mapper.instance_eval(File.read(rulefilename), rulefilename)
       
-      doc = map_xml(bbox)
+      
+      uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
+      
+      # handle exception?  
+      map_osm_response = Net::HTTP.get_response(uri)
+
+      #  old way:  go direct to map_xml
+      #  doc = map_xml(bbox)
+      # doc = response.body
+
+      File.open(tmp_osmfilename,'w') do |f|
+        f.write map_osm_response.body
+        f.close
+      end
+
       # debugger
       # write to file for now to be compatible with osmlib export api
       # tmp_osmfile = File.open(tmp_osmfilename, "w")
-      doc.save(tmp_osmfilename, :indent => true)
+      # doc.save(tmp_osmfilename, :indent => true)
       # tmp_osmfile.close 
 
       parser = OSM::Export::Parser.new(tmp_osmfilename, mapper)
