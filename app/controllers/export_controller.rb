@@ -5,6 +5,19 @@ require 'uri'
 
 # require 'securerandom'
 
+# This seems odd, but we're patching the Net::HTTP class
+# to set a longer timeout of 10 minutes
+module Net
+  class HTTP
+    alias old_initialize initialize
+
+    def initialize(*args)
+      old_initialize(*args)
+      @read_timeout = 10*60     # 10 minutes
+    end
+  end
+end
+
 class ExportController < ApplicationController
 
   before_filter :authorize_web
@@ -25,6 +38,14 @@ class ExportController < ApplicationController
       redirect_to "/api/#{API_VERSION}/map?bbox=#{bbox}"
 
     elsif format == "kml"
+      # ISSUES:  
+      # A)  This won't scale as it pulls the entire osm xml into memory in order to 
+      #     translate into kml. 
+      # B)  For kml format, we don't do a redirect as we do for osm format.  It could
+      #     be more consistent
+      #
+      # TODO:  Write kml response into cgimap call so that it can be streamed directly to client?  
+
       uuid = SecureRandom.hex
       rulefilename = File.join(Rails.root, 'config', 'base-kml.oxr')
       outfilename = [uuid, "grid.kml"].join("_")
