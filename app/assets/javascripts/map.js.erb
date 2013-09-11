@@ -123,7 +123,13 @@ function createMap(divName, options) {
        name: I18n.t("javascripts.map.base.gridmap")
      };
 
-  layersControl.addOverlay(new (grid_overlay.klass)(grid_overlay), grid_overlay.name);
+  //make gridmap layer management consistent with other layers
+  grid_layer = new (grid_overlay.klass)(grid_overlay);
+  layers.push(grid_overlay);  
+  layers[layers.length - 1].layer = grid_layer;
+
+  //add gridmap layer as an overlay
+  layersControl.addOverlay(grid_layer, grid_overlay.name);
 
   // add utfgrid
   var utfGrid = new L.UtfGrid('<%= GRIDMAPS_UTF_URL %>?callback={cb}');
