@@ -11,7 +11,7 @@ defaults: &defaults
   email_return_path: "Modilabs OSM <osm.modilabs@gmail.com>"
   mail_server: "smtp.gmail.com"
   mail_username: "osm.modilabs@gmail.com"
-  mail_password: "gr!dm^ps"
+  mail_password: "junk_password"
   # API version
   api_version: "0.6"
   # Application status - possible values are:
