@@ -10,9 +10,6 @@ class ExportController < ApplicationController
 
   caches_page :embed
 
-  def start
-  end
-
   #When the user clicks 'Export' we redirect to a URL which generates the export download
   def finish
     bbox = BoundingBox.from_lon_lat_params(params)
@@ -55,7 +52,7 @@ class ExportController < ApplicationController
       format = params[:mapnik_format]
       scale = params[:mapnik_scale]
 
-      redirect_to "http://parent.tile.openstreetmap.org/cgi-bin/export?bbox=#{bbox}&scale=#{scale}&format=#{format}"
+      redirect_to "http://render.openstreetmap.org/cgi-bin/export?bbox=#{bbox}&scale=#{scale}&format=#{format}"
     end
   end
 

@@ -1,15 +1,18 @@
-$(document).ready(function () {
-  $("#exportanchor").click(function (e) {
-    $.ajax({ url: $(this).data('url'), success: function (sidebarHtml) {
-      startExport(sidebarHtml);
-    }});
-    e.preventDefault();
-  });
+OSM.Export = function(map) {
+  var page = {};
 
-  if (window.location.pathname == "/export") {
-    $("#exportanchor").click();
+  var locationFilter = new L.LocationFilter({
+    enableButton: false,
+    adjustButton: false
+  }).on("change", update);
+
+  function getBounds() {
+    return L.latLngBounds(
+      L.latLng($("#minlat").val(), $("#minlon").val()),
+      L.latLng($("#maxlat").val(), $("#maxlon").val()));
   }
 
+<<<<<<< HEAD
   function startExport(sidebarHtml) {
     var marker;
 
@@ -271,34 +274,78 @@ $(document).ready(function () {
       }
 
       validateControls();
-    }
-
-    function maxMapnikScale() {
-      var bounds = getMercatorBounds();
-
-      return Math.floor(Math.sqrt(bounds.getWidth() * bounds.getHeight() / 0.3136));
-    }
-
-    function mapnikImageSize(scale) {
-      var bounds = getMercatorBounds();
-
-      return {w: Math.round(bounds.getWidth() / scale / 0.00028),
-              h: Math.round(bounds.getHeight() / scale / 0.00028)};
-    }
-
-    function roundScale(scale) {
-      var precision = 5 * Math.pow(10, Math.floor(Math.LOG10E * Math.log(scale)) - 2);
-
-      return precision * Math.ceil(scale / precision);
-    }
-
-    function mapnikSizeChanged() {
-      var size = mapnikImageSize($("#mapnik_scale").val());
-
-      $("#mapnik_image_width").html(size.w);
-      $("#mapnik_image_height").html(size.h);
-
-      validateControls();
-    }
   }
-});
+
+  function boundsChanged() {
+    var bounds = getBounds();
+    map.fitBounds(bounds);
+    locationFilter.setBounds(bounds);
+    locationFilter.enable();
+    validateControls();
+  }
+
+  function enableFilter(e) {
+    e.preventDefault();
+
+    $("#drag_box").hide();
+
+    locationFilter.setBounds(map.getBounds().pad(-0.2));
+    locationFilter.enable();
+    validateControls();
+  }
+
+  function update() {
+    setBounds(locationFilter.isEnabled() ? locationFilter.getBounds() : map.getBounds());
+    validateControls();
+  }
+
+  function setBounds(bounds) {
+    var precision = OSM.zoomPrecision(map.getZoom());
+    $("#minlon").val(bounds.getWest().toFixed(precision));
+    $("#minlat").val(bounds.getSouth().toFixed(precision));
+    $("#maxlon").val(bounds.getEast().toFixed(precision));
+    $("#maxlat").val(bounds.getNorth().toFixed(precision));
+
+    $("#export_overpass").attr("href",
+        "http://overpass-api.de/api/map?bbox=" +
+        $("#minlon").val() + "," + $("#minlat").val() + "," +
+        $("#maxlon").val() + "," + $("#maxlat").val());
+  }
+
+  function validateControls() {
+    $("#export_osm_too_large").toggle(getBounds().getSize() > OSM.MAX_REQUEST_AREA);
+    $("#export_commit").toggle(getBounds().getSize() < OSM.MAX_REQUEST_AREA);
+  }
+
+  function checkSubmit(e) {
+    if (getBounds().getSize() > OSM.MAX_REQUEST_AREA) e.preventDefault();
+  }
+
+  page.pushstate = page.popstate = function(path) {
+    $("#export_tab").addClass("current");
+    OSM.loadSidebarContent(path, page.load);
+  };
+
+  page.load = function() {
+    map
+      .addLayer(locationFilter)
+      .on("moveend", update);
+
+    $("#maxlat, #minlon, #maxlon, #minlat").change(boundsChanged);
+    $("#drag_box").click(enableFilter);
+    $(".export_form").on("submit", checkSubmit);
+
+    update();
+    return map.getState();
+  };
+
+  page.unload = function() {
+    map
+      .removeLayer(locationFilter)
+      .off("moveend", update);
+
+    $("#export_tab").removeClass("current");
+  };
+
+  return page;
+};

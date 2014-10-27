@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var marker;
+  var marker, map;
 
   function setLocation(e) {
     $("#latitude").val(e.latlng.lat);
@@ -21,7 +21,15 @@ $(document).ready(function () {
 
     var params = $("#map").data();
     var centre = [params.lat, params.lon];
-    var map = createMap("map");
+    var position = $('html').attr('dir') === 'rtl' ? 'topleft' : 'topright';
+
+    map = L.map("map", {
+      attributionControl: false,
+      zoomControl: false
+    }).addLayer(new L.OSM.Mapnik());
+
+    L.OSM.zoom({position: position})
+      .addTo(map);
 
     map.setView(centre, params.zoom);
 

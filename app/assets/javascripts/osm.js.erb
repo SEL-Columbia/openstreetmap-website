@@ -1,7 +1,6 @@
 OSM = {
-<% if defined?(PIWIK_LOCATION) and defined?(PIWIK_SITE) %>
-  PIWIK_LOCATION:        <%= PIWIK_LOCATION.to_json %>,
-  PIWIK_SITE:            <%= PIWIK_SITE.to_json %>,
+<% if defined?(PIWIK) %>
+  PIWIK:                 <%= PIWIK.to_json %>,
 <% end %>
 
   MAX_REQUEST_AREA:      <%= MAX_REQUEST_AREA.to_json %>,
@@ -13,7 +12,7 @@ OSM = {
   apiUrl: function (object) {
     var url = "/api/" + OSM.API_VERSION + "/" + object.type + "/" + object.id;
 
-    if (object.type != "node") {
+    if (object.type === "way" || object.type === "relation") {
       url += "/full";
     } else if (object.version) {
       url += "/" + object.version;
@@ -22,8 +21,8 @@ OSM = {
     return url;
   },
 
-  mapParams: function (search) {
-    var params = {}, mapParams = {}, loc;
+  params: function(search) {
+    var params = {};
 
     search = (search || window.location.search).replace('?', '').split(/&|;/);
 
@@ -35,87 +34,73 @@ OSM = {
       params[key] = decodeURIComponent(val);
     }
 
+    return params;
+  },
+
+  mapParams: function (search) {
+    var params = OSM.params(search), mapParams = {}, loc, match;
+
     if (params.mlon && params.mlat) {
       mapParams.marker = true;
       mapParams.mlon = parseFloat(params.mlon);
       mapParams.mlat = parseFloat(params.mlat);
     }
 
-    if (params.layers) {
-      mapParams.layers = params.layers;
+    // Old-style object parameters; still in use for edit links e.g. /edit?way=1234
+    if (params.node) {
+      mapParams.object = {type: 'node', id: parseInt(params.node)};
+    } else if (params.way) {
+      mapParams.object = {type: 'way', id: parseInt(params.way)};
+    } else if (params.relation) {
+      mapParams.object = {type: 'relation', id: parseInt(params.relation)};
     }
 
-    if (params.node || params.way || params.relation) {
-      mapParams.object_zoom = true;
+    var hash = OSM.parseHash(location.hash);
 
-      if (params.node) {
-        mapParams.object = {type: 'node', id: parseInt(params.node)};
-      } else if (params.way) {
-        mapParams.object = {type: 'way', id: parseInt(params.way)};
-      } else if (params.relation) {
-        mapParams.object = {type: 'relation', id: parseInt(params.relation)};
-      }
-    }
-
-    // Decide on a lat lon to initialise the map with. Various ways of doing this
-    if (params.bbox) {
-      var bbox = params.bbox.split(",");
-      mapParams.bbox = true;
-      mapParams.minlon = parseFloat(bbox[0]);
-      mapParams.minlat = parseFloat(bbox[1]);
-      mapParams.maxlon = parseFloat(bbox[2]);
-      mapParams.maxlat = parseFloat(bbox[3]);
-      mapParams.object_zoom = false;
+    // Decide on a map starting position. Various ways of doing this.
+    if (hash.center) {
+      mapParams.lon = hash.center.lng;
+      mapParams.lat = hash.center.lat;
+      mapParams.zoom = hash.zoom;
+    } else if (params.bbox) {
+      var bbox = params.bbox.split(',');
+      mapParams.bounds = L.latLngBounds(
+        [parseFloat(bbox[1]), parseFloat(bbox[0])],
+        [parseFloat(bbox[3]), parseFloat(bbox[2])]);
     } else if (params.minlon && params.minlat && params.maxlon && params.maxlat) {
-      mapParams.bbox = true;
-      mapParams.minlon = parseFloat(params.minlon);
-      mapParams.minlat = parseFloat(params.minlat);
-      mapParams.maxlon = parseFloat(params.maxlon);
-      mapParams.maxlat = parseFloat(params.maxlat);
-      mapParams.object_zoom = false;
+      mapParams.bounds = L.latLngBounds(
+        [parseFloat(params.minlat), parseFloat(params.minlon)],
+        [parseFloat(params.maxlat), parseFloat(params.maxlon)]);
     } else if (params.lon && params.lat) {
       mapParams.lon = parseFloat(params.lon);
       mapParams.lat = parseFloat(params.lat);
       mapParams.zoom = parseInt(params.zoom || 5);
-      mapParams.object_zoom = false;
     } else if (params.mlon && params.mlat) {
       mapParams.lon = parseFloat(params.mlon);
       mapParams.lat = parseFloat(params.mlat);
       mapParams.zoom = parseInt(params.zoom || 12);
-      mapParams.object_zoom = false;
     } else if (loc = $.cookie('_osm_location')) {
       loc = loc.split("|");
       mapParams.lon = parseFloat(loc[0]);
       mapParams.lat = parseFloat(loc[1]);
       mapParams.zoom = parseInt(loc[2]);
-      mapParams.layers = loc[3];
     } else if (OSM.home) {
       mapParams.lon = OSM.home.lon;
       mapParams.lat = OSM.home.lat;
       mapParams.zoom = 10;
     } else if (OSM.location) {
-      mapParams.bbox = true;
-      mapParams.minlon = OSM.location.minlon;
-      mapParams.minlat = OSM.location.minlat;
-      mapParams.maxlon = OSM.location.maxlon;
-      mapParams.maxlat = OSM.location.maxlat;
+      mapParams.bounds = L.latLngBounds(
+        [OSM.location.minlat,
+         OSM.location.minlon],
+        [OSM.location.maxlat,
+         OSM.location.maxlon]);
     } else {
       mapParams.lon = -0.1;
       mapParams.lat = 51.5;
       mapParams.zoom = parseInt(params.zoom || 5);
     }
 
-    if (mapParams.bbox) {
-      mapParams.box = params.box == "yes";
-      mapParams.lon = (mapParams.minlon + mapParams.maxlon) / 2;
-      mapParams.lat = (mapParams.minlat + mapParams.maxlat) / 2;
-    }
-
-    mapParams.notes = params.notes == "yes";
-
-    if (params.note) {
-      mapParams.note = parseInt(params.note);
-    }
+    mapParams.layers = hash.layers || (loc && loc[3]) || '';
 
     var scale = parseFloat(params.scale);
     if (scale > 0) {
@@ -123,5 +108,71 @@ OSM = {
     }
 
     return mapParams;
+  },
+
+  parseHash: function(hash) {
+    var args = {};
+
+    var i = hash.indexOf('#');
+    if (i < 0) {
+      return args;
+    }
+
+    hash = querystring.parse(hash.substr(i + 1));
+
+    var map = (hash.map || '').split('/'),
+      zoom = parseInt(map[0], 10),
+      lat = parseFloat(map[1]),
+      lon = parseFloat(map[2]);
+
+    if (!isNaN(zoom) && !isNaN(lat) && !isNaN(lon)) {
+      args.center = new L.LatLng(lat, lon);
+      args.zoom = zoom;
+    }
+
+    if (hash.layers) {
+      args.layers = hash.layers;
+    }
+
+    return args;
+  },
+
+  formatHash: function(args) {
+    var center, zoom, layers;
+
+    if (args instanceof L.Map) {
+      center = args.getCenter();
+      zoom = args.getZoom();
+      layers = args.getLayersCode();
+    } else {
+      center = args.center || L.latLng(args.lat, args.lon);
+      zoom = args.zoom;
+      layers = args.layers || '';
+    }
+
+    center = center.wrap();
+    layers = layers.replace('M', '');
+
+    var precision = OSM.zoomPrecision(zoom),
+      hash = '#map=' + zoom +
+        '/' + center.lat.toFixed(precision) +
+        '/' + center.lng.toFixed(precision);
+
+    if (layers) {
+      hash += '&layers=' + layers;
+    }
+
+    return hash;
+  },
+
+  zoomPrecision: function(zoom) {
+    return Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
+  },
+
+  locationCookie: function(map) {
+    var center = map.getCenter().wrap(),
+      zoom = map.getZoom(),
+      precision = OSM.zoomPrecision(zoom);
+    return [center.lng.toFixed(precision), center.lat.toFixed(precision), zoom, map.getLayersCode()].join('|');
   }
 };

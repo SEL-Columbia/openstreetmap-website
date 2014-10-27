@@ -26,7 +26,7 @@ class UserPreferenceController < ApplicationController
   ##
   # return the value for a single preference
   def read_one
-    pref = UserPreference.find(@user.id, params[:preference_key])
+    pref = UserPreference.find([@user.id, params[:preference_key]])
 
     render :text => pref.v.to_s, :content_type => "text/plain"
   end
@@ -62,14 +62,14 @@ class UserPreferenceController < ApplicationController
       preference.save!
     end
 
-    render :nothing => true, :content_type => "text/plain"
+    render :text => "", :content_type => "text/plain"
   end
 
   ##
   # update the value of a single preference
   def update_one
     begin
-      pref = UserPreference.find(@user.id, params[:preference_key])
+      pref = UserPreference.find([@user.id, params[:preference_key]])
     rescue ActiveRecord::RecordNotFound 
       pref = UserPreference.new
       pref.user = @user
@@ -79,14 +79,14 @@ class UserPreferenceController < ApplicationController
     pref.v = request.raw_post.chomp
     pref.save!
 
-    render :nothing => true, :content_type => "text/plain"
+    render :text => "", :content_type => "text/plain"
   end
 
   ##
   # delete a single preference
   def delete_one
-    UserPreference.find(@user.id, params[:preference_key]).delete
+    UserPreference.find([@user.id, params[:preference_key]]).delete
 
-    render :nothing => true, :content_type => "text/plain"
+    render :text => "", :content_type => "text/plain"
   end
 end

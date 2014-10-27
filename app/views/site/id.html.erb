@@ -20,7 +20,8 @@
 
     var id = iD()
       .embed(true)
-      .assetPath("/assets/iD/") <%# Can't use asset_path('iD/') in production. %>
+      .assetPath("/iD/") <%# Can't use asset_path('iD/') in production. %>
+      .assetMap(<%= assets("iD").to_json.html_safe %>)
       .locale("<%= locale %>", "<%= asset_path("iD/locales/#{locale}.json") %>")
       .preauth({
         <% token = @user.access_token(ID_KEY) %>
@@ -31,21 +32,20 @@
         oauth_token_secret: "<%= token.secret %>"
       });
 
-    id.map().on('move.embed', function() {
-      var extent = id.map().extent(),
-          zoom = ~~id.map().zoom(),
-          center = id.map().center();
+    id.map().on('move.embed', parent.$.throttle(250, function() {
+      var zoom = ~~id.map().zoom(),
+        center = id.map().center(),
+        llz = { lon: center[0], lat: center[1], zoom: zoom };
 
-      parent.updatelinks(
-        center[0],
-        center[1],
-        zoom,
-        null,
-        extent[0][0],
-        extent[0][1],
-        extent[1][0],
-        extent[1][1]);
-    });
+      parent.updateLinks(llz, zoom);
+
+      // Manually resolve URL to avoid iframe JS context weirdness.
+      // http://bl.ocks.org/jfirebaugh/5439412
+      var hash = parent.OSM.formatHash(llz);
+      if (hash !== parent.location.hash) {
+        parent.location.replace(parent.location.href.replace(/(#.*|$)/, hash));
+      }
+    }));
 
     parent.$("body").on("click", "a.set_position", function (e) {
       e.preventDefault();
@@ -58,16 +58,6 @@
           [data.lon, data.lat],
           Math.max(data.zoom || 15, 13));
       }, 0);
-    });
-
-    var maximized = false;
-    id.on('toggleFullscreen.embed', function() {
-      if (maximized) {
-        parent.minimiseMap();
-      } else {
-        parent.maximiseMap();
-      }
-      maximized = !maximized;
     });
 
     d3.select('#id-container')
