@@ -104,12 +104,11 @@ class UserController < ApplicationController
             session[:referer] = referer
             successful_login(@user)
           else
-            flash[:notice] = t 'user.new.flash create success message', :email => @user.email
             if PRIVATE_INSTANCE
               Notifier.signup_confirm(@user, nil).deliver
             else
               session[:token] = @user.tokens.create.token
-              Notifier.signup_confirm(@user, @user.tokens.create(:referer => session.delete(:referer))).deliver
+              Notifier.signup_confirm(@user, @user.tokens.create(:referer => referer)).deliver
               redirect_to :action => 'confirm', :display_name => @user.display_name
             end
           end
