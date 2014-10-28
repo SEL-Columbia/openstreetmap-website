@@ -306,7 +306,7 @@ class UserControllerTest < ActionController::TestCase
     assert_difference('User.count', 1) do
       assert_difference('ActionMailer::Base.deliveries.size', 1) do
         post :save, {}, {:new_user => user,
-                         :referer => '/edit?editor=id#map=1/2/3'}
+                         :referer => '/welcome?editor=id&lat=2&lon=3&zoom=1'}
         end
     end
 
