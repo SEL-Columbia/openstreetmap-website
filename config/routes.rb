@@ -153,6 +153,7 @@ OpenStreetMap::Application.routes.draw do
   match '/user/new' => 'user#new', :via => :get
   match '/user/new' => 'user#create', :via => :post
   match '/user/terms' => 'user#terms', :via => :get
+  match '/user/private_terms' => 'user#private_terms', :via => :get
   match '/user/save' => 'user#save', :via => :post
   match '/user/:display_name/confirm/resend' => 'user#confirm_resend', :via => :get
   match '/user/:display_name/confirm' => 'user#confirm', :via => [:get, :post]

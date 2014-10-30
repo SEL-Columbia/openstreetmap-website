@@ -1724,6 +1724,7 @@ en:
       declined: "http://wiki.openstreetmap.org/wiki/Contributor_Terms_Declined"
       decline: "Decline"
       you need to accept or decline: "Please read and then either accept or decline the new Contributor Terms to continue."
+      private_fork_terms:  "Data collected will be available to Columbia U and collaborators"
       legale_select: "Country of residence:"
       legale_names:
         france: "France"

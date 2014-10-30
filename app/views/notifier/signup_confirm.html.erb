@@ -2,11 +2,9 @@
 
 <p><%= t("notifier.signup_confirm.created", :site_url => SERVER_URL) %></p>
 
-<% if !PRIVATE_INSTANCE -%>
 <p><%= t("notifier.signup_confirm.confirm") %></p>
 
 <p><%= link_to @url, @url %></p>
 
 <p><%= t("notifier.signup_confirm.welcome") %></p>
-<% end -%>
 

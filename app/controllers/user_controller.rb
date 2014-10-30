@@ -37,6 +37,18 @@ class UserController < ApplicationController
     end
   end
 
+  def private_terms
+    @title = t 'user.terms.title'
+
+    if @user and @user.terms_agreed?
+      # Already agreed to terms, so just show settings
+      redirect_to :action => :account, :display_name => @user.display_name
+    elsif @user.nil? and session[:new_user].nil?
+      redirect_to :action => :login, :referer => request.fullpath
+    end
+  end
+
+
   def save
     @title = t 'user.new.title'
 
@@ -104,13 +116,9 @@ class UserController < ApplicationController
             session[:referer] = referer
             successful_login(@user)
           else
-            if PRIVATE_INSTANCE
-              Notifier.signup_confirm(@user, nil).deliver
-            else
-              session[:token] = @user.tokens.create.token
-              Notifier.signup_confirm(@user, @user.tokens.create(:referer => referer)).deliver
-              redirect_to :action => 'confirm', :display_name => @user.display_name
-            end
+            session[:token] = @user.tokens.create.token
+            Notifier.signup_confirm(@user, @user.tokens.create(:referer => referer)).deliver
+            redirect_to :action => 'confirm', :display_name => @user.display_name
           end
         else
           render :action => 'new', :referer => params[:referer]
@@ -211,7 +219,7 @@ class UserController < ApplicationController
   def new
     @title = t 'user.new.title'
     @referer = params[:referer] || session[:referer]
-
+    
     if using_open_id?
       # The redirect from the OpenID provider reenters here
       # again and we need to pass the parameters through to
@@ -226,7 +234,11 @@ class UserController < ApplicationController
         render :action => 'new'
       else
         session[:new_user] = @user
-        redirect_to :action => 'terms'
+	if PRIVATE_INSTANCE
+          redirect_to :action => 'private_terms'
+	else 
+          redirect_to :action => 'terms'
+	end
       end
     elsif @user
       # The user is logged in already, so don't show them the signup
@@ -273,7 +285,11 @@ class UserController < ApplicationController
       else
         # Save the user record
         session[:new_user] = @user
-        redirect_to :action => :terms
+	if PRIVATE_INSTANCE
+          redirect_to :action => :private_terms
+	else
+          redirect_to :action => :terms
+	end
       end
     end
   end
