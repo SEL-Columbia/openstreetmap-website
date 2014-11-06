@@ -51,6 +51,18 @@ class ExportController < ApplicationController
       tmp_outfilename = File.join("tmp", outfilename)
       tmp_osmfilename = File.join("tmp", osmfilename)
       mapper = OSM::Export::KML.new(tmp_outfilename)
+ 
+      # Use if we want to retrieve map xml from alternative URL (via cgimap for speed)
+      # uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
+      # 
+      ## handle exception?  
+      # map_osm_response = Net::HTTP.get_response(uri)
+
+      # File.open(tmp_osmfilename,'w') do |f|
+      #   f.write map_osm_response.body
+      #   f.close
+      # end
+
       mapper.instance_eval(File.read(rulefilename), rulefilename)
       
       doc = map_xml(bbox)

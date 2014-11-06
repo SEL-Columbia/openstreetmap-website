@@ -1,7 +1,7 @@
 defaults: &defaults
   # The server URL
   server_url: "192.168.33.85"
-  server_url: "192.168.33.30:3000"
+  server_map_url: "http://192.168.33.30:3001"
   # The generator
   generator: "OpenStreetMap server"
   copyright_owner: "Modilabs"
