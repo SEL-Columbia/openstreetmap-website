@@ -46,7 +46,8 @@ OpenStreetMap::Application.routes.draw do
   match 'api/0.6/relation/:id' => 'relation#delete', :via => :delete, :id => /\d+/
   match 'api/0.6/relations' => 'relation#relations', :via => :get
 
-  match 'api/0.6/map' => 'api#map', :via => :get
+  # match 'api/0.6/map' => 'api#map', :via => :get
+  match 'api/0.6/map' => redirect {|params, req| SERVER_MAP_URL + "/api/#{API_VERSION}/map?#{req.query_string}" }, :via => :get
 
   match 'api/0.6/trackpoints' => 'api#trackpoints', :via => :get
 
