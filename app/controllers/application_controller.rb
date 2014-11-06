@@ -430,9 +430,9 @@ class ApplicationController < ActionController::Base
     # find which ways are needed
     ways = Array.new
     if node_ids.length > 0
-      way_nodes = WayNode.find_all_by_node_id(node_ids)
+      way_nodes = WayNode.where(node_id: node_ids)
       way_ids = way_nodes.collect { |way_node| way_node.id[0] }
-      ways = Way.find(way_ids, :include => [:way_nodes, :way_tags])
+      ways = Way.includes(:way_nodes, :way_tags).find(way_ids)
 
       list_of_way_nodes = ways.collect { |way|
         way.way_nodes.collect { |way_node| way_node.node_id }

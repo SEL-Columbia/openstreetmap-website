@@ -6,7 +6,6 @@
 </h2>
 
 <%= form_tag({:controller => "export", :action => "finish"}, :class => "export_form") do %>
-  <%= hidden_field_tag 'format', 'osm' %>
 
   <div class='export_area_inputs'>
     <div class='export_boxy' style="border: 1px solid #ccc;">
@@ -20,14 +19,25 @@
     <a id='drag_box' href="#"><%= t'export.start.manually_select' %></a>
   </div>
 
+  <% if !PRIVATE_INSTANCE %>
   <h4><%= t'export.start.licence' %></h4>
   <p><%= raw t 'export.start.export_details' %></p>
+  <% end %>
 
   <div id="export_osm_too_large">
     <p class="warning">
       <%= t'export.start.too_large.body' %>
     </p>
   </div>
+
+  <% if PRIVATE_INSTANCE %>
+  <ul class="export_details inner12">
+    <li><%= radio_button_tag("format", "kml", checked=true) %> <%= t'export.start.osm_kml_data' %></li>
+    <li><%= radio_button_tag("format", "osm") %> <%= t'export.start.osm_xml_data' %></li>
+  </ul>
+  <% else %>
+  <%= hidden_field_tag 'format', 'osm' %>
+  <% end %>
 
   <div id="export_commit">
     <div class="export_button">

@@ -87,7 +87,7 @@ gem 'osmlib-export'
 # Gems useful for development
 group :development do
   gem 'vendorer'
-  gem 'debugger'
+  gem 'debugger', '>= 1.6.6'
 end
 
 # Gems needed for running tests

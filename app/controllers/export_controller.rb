@@ -27,12 +27,10 @@ class ExportController < ApplicationController
       
       tmp_outfilename = File.join("tmp", outfilename)
       tmp_osmfilename = File.join("tmp", osmfilename)
-      # debugger
       mapper = OSM::Export::KML.new(tmp_outfilename)
       mapper.instance_eval(File.read(rulefilename), rulefilename)
       
       doc = map_xml(bbox)
-      # debugger
       # write to file for now to be compatible with osmlib export api
       # tmp_osmfile = File.open(tmp_osmfilename, "w")
       doc.save(tmp_osmfilename, :indent => true)

@@ -174,6 +174,7 @@ L.OSM.layers = function(options) {
 
       addOverlay(map.noteLayer, 'notes', OSM.MAX_NOTE_REQUEST_AREA);
       addOverlay(map.dataLayer, 'data', OSM.MAX_REQUEST_AREA);
+      addOverlay(map.gridLayer, 'grid');
     }
 
     options.sidebar.addPane($ui);

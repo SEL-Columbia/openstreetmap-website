@@ -54,6 +54,10 @@ L.OSM.Map = L.Map.extend({
 
     this.dataLayer = new L.OSM.DataLayer(null);
     this.dataLayer.options.code = 'D';
+
+    this.gridLayer = new L.OSM.GridMap(null);
+    this.gridLayer.options.code = 'G';
+
   },
 
   updateLayers: function(layerParam) {

@@ -58,6 +58,13 @@ L.OSM.HOT = L.OSM.TileLayer.extend({
   }
 });
 
+L.OSM.GridMap = L.OSM.TileLayer.extend({
+  options: {
+    url: OSM.GRIDMAPS_TILE_URL,
+    maxZoom: 17,
+  }
+});
+
 L.OSM.DataLayer = L.FeatureGroup.extend({
   options: {
     areaTags: ['area', 'building', 'leisure', 'tourism', 'ruins', 'historic', 'landuse', 'military', 'natural', 'sport'],

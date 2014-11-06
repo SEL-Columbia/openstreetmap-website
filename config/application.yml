@@ -1,6 +1,6 @@
 defaults: &defaults
   # The server URL
-  server_url: "192.168.33.85:3000"
+  server_url: "192.168.33.85"
   # The generator
   generator: "OpenStreetMap server"
   copyright_owner: "Modilabs"
@@ -11,7 +11,7 @@ defaults: &defaults
   email_return_path: "Modilabs OSM <osm.modilabs@gmail.com>"
   mail_server: "smtp.gmail.com"
   mail_username: "osm.modilabs@gmail.com"
-  mail_password: "junk_password"
+  mail_password: "password"
   # API version
   api_version: "0.6"
   # Application status - possible values are:
@@ -93,12 +93,12 @@ defaults: &defaults
 development:
   <<: *defaults
   private_instance: true
-  gridmaps_tile_url:  "http://192.168.33.80:8000/pln/{z}/{x}/{y}.png"
+  gridmaps_tile_url:  "http://192.168.33.80/tilestache/pln/{z}/{x}/{y}.png"
 
 production:
   <<: *defaults
   private_instance: true
-  gridmaps_tile_url:  "http://192.168.33.80:8000/pln/{z}/{x}/{y}.png"
+  gridmaps_tile_url:  "http://192.168.33.80/tilestache/gridmaps/{z}/{x}/{y}.png"
 
 test:
   <<: *defaults
