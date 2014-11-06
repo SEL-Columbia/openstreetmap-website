@@ -20,13 +20,13 @@ module ApplicationHelper
   def style_rules
     css = ""
 
-    css << ".hidden { display: none !important }";
-    css << ".hide_unless_logged_in { display: none !important }" unless @user;
-    css << ".hide_if_logged_in { display: none !important }" if @user;
-    css << ".hide_if_user_#{@user.id} { display: none !important }" if @user;
-    css << ".show_if_user_#{@user.id} { display: inline !important }" if @user;
-    css << ".hide_unless_administrator { display: none !important }" unless @user and @user.administrator?;
-    css << ".hide_unless_moderator { display: none !important }" unless @user and @user.moderator?;
+    css << ".hidden { display: none !important }"
+    css << ".hide_unless_logged_in { display: none !important }" unless @user
+    css << ".hide_if_logged_in { display: none !important }" if @user
+    css << ".hide_if_user_#{@user.id} { display: none !important }" if @user
+    css << ".show_if_user_#{@user.id} { display: inline !important }" if @user
+    css << ".hide_unless_administrator { display: none !important }" unless @user and @user.administrator?
+    css << ".hide_unless_moderator { display: none !important }" unless @user and @user.moderator?
 
     return content_tag(:style, css, :type => "text/css")
   end
@@ -57,20 +57,6 @@ module ApplicationHelper
     content_tag(tag, capture(&block), :class => "hide_unless_administrator")
   end
 
-  def preferred_editor
-    if params[:editor]
-      params[:editor]
-    elsif @user and @user.preferred_editor
-      @user.preferred_editor
-    else
-      DEFAULT_EDITOR
-    end
-  end
-
-  def scale_to_zoom(scale)
-    Math.log(360.0 / (scale.to_f * 512.0)) / Math.log(2.0)
-  end
-
   def richtext_area(object_name, method, options = {})
     id = "#{object_name.to_s}_#{method.to_s}"
     format = options.delete(:format) || "markdown"
@@ -83,8 +69,10 @@ module ApplicationHelper
 
       output_buffer << content_tag(:div, :id => "#{id}_help", :class => "richtext_help") do
         output_buffer << render("site/#{format}_help")
-        output_buffer << submit_tag(I18n.t("site.richtext_area.edit"), :id => "#{id}_doedit", :class => "richtext_doedit", :disabled => true)
-        output_buffer << submit_tag(I18n.t("site.richtext_area.preview"), :id => "#{id}_dopreview", :class => "richtext_dopreview")
+        output_buffer << content_tag(:div, :class => "buttons") do
+          output_buffer << submit_tag(I18n.t("site.richtext_area.edit"), :id => "#{id}_doedit", :class => "richtext_doedit deemphasize", :disabled => true)
+          output_buffer << submit_tag(I18n.t("site.richtext_area.preview"), :id => "#{id}_dopreview", :class => "richtext_dopreview deemphasize")
+        end
       end
     end
   end
@@ -99,5 +87,17 @@ module ApplicationHelper
 
   def friendly_date(date)
     content_tag(:span, time_ago_in_words(date), :title => l(date, :format => :friendly))
+  end
+
+  def body_class
+    if content_for? :body_class
+      content_for :body_class
+    else
+      "#{params[:controller]} #{params[:controller]}-#{params[:action]}"
+    end
+  end
+
+  def current_page_class(path)
+    :current if current_page?(path)
   end
 end

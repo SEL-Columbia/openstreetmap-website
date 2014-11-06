@@ -2,7 +2,7 @@
   <h1><%= t('diary_entry.comments.has_commented_on', :display_name => @this_user.display_name) %></h1>
 <% end %>
 
-<table class="comments-table" width="100%">
+<table class="messages" width="100%">
   <tr>
     <th width="25%"><%= t 'diary_entry.comments.post' %></th>
     <th width="25%"><%= t 'diary_entry.comments.when' %></th>
@@ -18,7 +18,7 @@
   <% end -%>
 </table>
 
-<ul class='secondary-actions clearfix'>
-  <li><%= link_to t('diary_entry.comments.older_comments') , { :page => @comment_pages.current.next} if @comment_pages.current.next %></li>
-  <li><%= link_to t('diary_entry.comments.newer_comments'), { :page => @comment_pages.current.previous } if @comment_pages.current.previous %></li>
-</ul>
+<div class='secondary-actions clearfix'>
+  <span><%= link_to t('diary_entry.comments.older_comments') , { :page => @comment_pages.current.next} if @comment_pages.current.next %>
+  <%= link_to t('diary_entry.comments.newer_comments'), { :page => @comment_pages.current.previous } if @comment_pages.current.previous %></span>
+</div>

@@ -76,7 +76,7 @@ defaults: &defaults
   # URL of Nominatim instance to use for geocoding
   nominatim_url: "http://nominatim.openstreetmap.org/"
   # Default editor
-  default_editor: "potlatch2"
+  default_editor: "id"
   # OAuth consumer key for Potlatch 2
   #potlatch2_key: ""
   # OAuth consumer key for the web site
@@ -87,23 +87,23 @@ defaults: &defaults
   require_terms_seen: false
   # Whether to require users to agree to the CTs before editing
   require_terms_agreed: false
-  # Piwik details
-  #piwik_location: "piwik.openstreetmap.org"
-  #piwik_site: 1
-  #piwik_signup_goal: 1
+  # Imagery to return in capabilities as blacklisted
+  imagery_blacklist:
+    - ".*\\.googleapis\\.com/.*"
+    - ".*\\.google\\.com/.*"
+    - ".*\\.google\\.ru/.*"
   private_instance: false
+  gridmaps_tile_url:  "http://localhost:8000/tiles/{z}/{x}/{y}.png"
 
 development:
   <<: *defaults
   private_instance: true
   gridmaps_tile_url:  "http://192.168.33.40:8000/pln/{z}/{x}/{y}.png"
-  gridmaps_utf_url:  "http://192.168.33.40:8000/pln_utfgrid/{z}/{x}/{y}.json"
 
 production:
   <<: *defaults
   private_instance: true
   gridmaps_tile_url:  "http://tiles.modilabs.org/pln/{z}/{x}/{y}.png"
-  gridmaps_utf_url:  "http://tiles.modilabs.org/pln_utfgrid/{z}/{x}/{y}.json"
 
 test:
   <<: *defaults

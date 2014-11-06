@@ -5,7 +5,6 @@ module OSM
   require 'rexml/parsers/sax2parser'
   require 'rexml/text'
   require 'xml/libxml'
-  require 'digest/md5'
 
   if defined?(SystemTimer)
     Timer = SystemTimer
@@ -22,6 +21,17 @@ module OSM
 
     def to_s
       "Generic API Error"
+    end
+  end
+
+  # Raised when access is denied.
+  class APIAccessDenied < RuntimeError
+    def status
+      :forbidden
+    end
+
+    def to_s
+      "Access denied"
     end
   end
 
@@ -400,7 +410,7 @@ module OSM
 
       begin
         lonradius = 2 * asin(sqrt(sin(radius / 6372.795 / 2) ** 2 / cos(@lat) ** 2))
-      rescue Errno::EDOM
+      rescue Errno::EDOM, Math::DomainError
         lonradius = PI
       end
 
@@ -415,92 +425,6 @@ module OSM
     # get the SQL to use to calculate distance
     def sql_for_distance(lat_field, lon_field)
       "6372.795 * 2 * asin(sqrt(power(sin((radians(#{lat_field}) - #{@lat}) / 2), 2) + cos(#{@lat}) * cos(radians(#{lat_field})) * power(sin((radians(#{lon_field}) - #{@lon})/2), 2)))"
-    end
-  end
-
-  class GeoRSS
-    def initialize(feed_title='OpenStreetMap GPS Traces', feed_description='OpenStreetMap GPS Traces', feed_url='http://www.openstreetmap.org/traces/')
-      @doc = XML::Document.new
-      @doc.encoding = XML::Encoding::UTF_8
-
-      rss = XML::Node.new 'rss'
-      @doc.root = rss
-      rss['version'] = "2.0"
-      rss['xmlns:geo'] = "http://www.w3.org/2003/01/geo/wgs84_pos#"
-      @channel = XML::Node.new 'channel'
-      rss << @channel
-      title = XML::Node.new 'title'
-      title <<  feed_title
-      @channel << title
-      description_el = XML::Node.new 'description'
-      @channel << description_el
-
-      description_el << feed_description
-      link = XML::Node.new 'link'
-      link << feed_url
-      @channel << link
-      image = XML::Node.new 'image'
-      @channel << image
-      url = XML::Node.new 'url'
-      url << 'http://www.openstreetmap.org/images/mag_map-rss2.0.png'
-      image << url
-      title = XML::Node.new 'title'
-      title << "OpenStreetMap"
-      image << title
-      width = XML::Node.new 'width'
-      width << '100'
-      image << width
-      height = XML::Node.new 'height'
-      height << '100'
-      image << height
-      link = XML::Node.new 'link'
-      link << feed_url
-      image << link
-    end
-
-    def add(latitude=0, longitude=0, title_text='dummy title', author_text='anonymous', url='http://www.example.com/', description_text='dummy description', timestamp=DateTime.now)
-      item = XML::Node.new 'item'
-
-      title = XML::Node.new 'title'
-      item << title
-      title << title_text
-      link = XML::Node.new 'link'
-      link << url
-      item << link
-
-      guid = XML::Node.new 'guid'
-      guid << url
-      item << guid
-
-      description = XML::Node.new 'description'
-      description << description_text
-      item << description
-
-      author = XML::Node.new 'author'
-      author << author_text
-      item << author
-
-      pubDate = XML::Node.new 'pubDate'
-      pubDate << timestamp.to_s(:rfc822)
-      item << pubDate
-
-      if latitude
-        lat_el = XML::Node.new 'geo:lat'
-        lat_el << latitude.to_s
-        item << lat_el
-      end
-
-      if longitude
-        lon_el = XML::Node.new 'geo:long'
-        lon_el << longitude.to_s
-        item << lon_el
-      end
-
-      @channel << item
-    end
-
-    def to_s
-      return @doc.to_s
     end
   end
 
@@ -550,6 +474,13 @@ module OSM
     return nil
   end
 
+  # Parse a float, raising a specified exception on failure
+  def self.parse_float(str, klass, *args)
+    Float(str)
+  rescue
+    raise klass.new(*args)
+  end
+
   # Construct a random token of a given length
   def self.make_token(length = 30)
     chars = 'abcdefghijklmnopqrtuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -560,12 +491,6 @@ module OSM
     end
 
     return token
-  end
-
-  # Return an encrypted version of a password
-  def self.encrypt_password(password, salt)
-    return Digest::MD5.hexdigest(password) if salt.nil?
-    return Digest::MD5.hexdigest(salt + password)
   end
 
   # Return an SQL fragment to select a given area of the globe

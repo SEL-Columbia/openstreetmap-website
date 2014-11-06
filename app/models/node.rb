@@ -5,12 +5,13 @@ class Node < ActiveRecord::Base
   include GeoRecord
   include ConsistencyValidations
   include NotRedactable
+  include ObjectMetadata
 
   self.table_name = "current_nodes"
 
   belongs_to :changeset
 
-  has_many :old_nodes, :order => :version
+  has_many :old_nodes, -> { order(:version) }
 
   has_many :way_nodes
   has_many :ways, :through => :way_nodes
@@ -21,7 +22,7 @@ class Node < ActiveRecord::Base
   has_many :ways_via_history, :class_name=> "Way", :through => :old_way_nodes, :source => :way
 
   has_many :containing_relation_members, :class_name => "RelationMember", :as => :member
-  has_many :containing_relations, :class_name => "Relation", :through => :containing_relation_members, :source => :relation, :extend => ObjectFinder
+  has_many :containing_relations, :class_name => "Relation", :through => :containing_relation_members, :source => :relation
 
   validates_presence_of :id, :on => :update
   validates_presence_of :timestamp,:version,  :changeset_id
@@ -32,36 +33,12 @@ class Node < ActiveRecord::Base
   validate :validate_position
   validates_associated :changeset
 
-  scope :visible, where(:visible => true)
-  scope :invisible, where(:visible => false)
+  scope :visible, -> { where(:visible => true) }
+  scope :invisible, -> { where(:visible => false) }
 
   # Sanity check the latitude and longitude and add an error if it's broken
   def validate_position
     errors.add(:base, "Node is not in the world") unless in_world?
-  end
-
-  #
-  # Search for nodes matching tags within bounding_box
-  #
-  # Also adheres to limitations such as within max_number_of_nodes
-  #
-  def self.search(bounding_box, tags = {})
-    # @fixme a bit of a hack to search for only visible nodes
-    # couldn't think of another to add to tags condition
-    #conditions_hash = tags.merge({ 'visible' => 1 })
-  
-    # using named placeholders http://www.robbyonrails.com/articles/2005/10/21/using-named-placeholders-in-ruby
-    #keys = []
-    #values = {}
-
-    #conditions_hash.each do |key,value|
-    #  keys <<  "#{key} = :#{key}"
-    #  values[key.to_sym] = value
-    #end 
-    #conditions = keys.join(' AND ')
- 
-    find_by_area(bounding_box, :conditions => {:visible => true},
-                       :limit => MAX_NUMBER_OF_NODES+1)
   end
 
   # Read in xml as text and return it's Node object representation
@@ -84,8 +61,8 @@ class Node < ActiveRecord::Base
     
     raise OSM::APIBadXMLError.new("node", pt, "lat missing") if pt['lat'].nil?
     raise OSM::APIBadXMLError.new("node", pt, "lon missing") if pt['lon'].nil?
-    node.lat = pt['lat'].to_f
-    node.lon = pt['lon'].to_f
+    node.lat = OSM.parse_float(pt['lat'], OSM::APIBadXMLError, "node", pt, "lat not a number")
+    node.lon = OSM.parse_float(pt['lon'], OSM::APIBadXMLError, "node", pt, "lon not a number")
     raise OSM::APIBadXMLError.new("node", pt, "Changeset id is missing") if pt['changeset'].nil?
     node.changeset_id = pt['changeset'].to_i
 
@@ -200,47 +177,19 @@ class Node < ActiveRecord::Base
   end
 
   def to_xml_node(changeset_cache = {}, user_display_name_cache = {})
-    el1 = XML::Node.new 'node'
-    el1['id'] = self.id.to_s
-    el1['version'] = self.version.to_s
-    el1['changeset'] = self.changeset_id.to_s
+    el = XML::Node.new 'node'
+    el['id'] = self.id.to_s
+
+    add_metadata_to_xml_node(el, self, changeset_cache, user_display_name_cache)
 
     if self.visible?
-      el1['lat'] = self.lat.to_s
-      el1['lon'] = self.lon.to_s
+      el['lat'] = self.lat.to_s
+      el['lon'] = self.lon.to_s
     end
 
-    if changeset_cache.key?(self.changeset_id)
-      # use the cache if available
-    else
-      changeset_cache[self.changeset_id] = self.changeset.user_id
-    end
+    add_tags_to_xml_node(el, self.node_tags)
 
-    user_id = changeset_cache[self.changeset_id]
-
-    if user_display_name_cache.key?(user_id)
-      # use the cache if available
-    elsif self.changeset.user.data_public?
-      user_display_name_cache[user_id] = self.changeset.user.display_name
-    else
-      user_display_name_cache[user_id] = nil
-    end
-
-    if not user_display_name_cache[user_id].nil?
-      el1['user'] = user_display_name_cache[user_id]
-      el1['uid'] = user_id.to_s
-    end
-
-    self.tags.each do |k,v|
-      el2 = XML::Node.new('tag')
-      el2['k'] = k.to_s
-      el2['v'] = v.to_s
-      el1 << el2
-    end
-
-    el1['visible'] = self.visible.to_s
-    el1['timestamp'] = self.timestamp.xmlschema
-    return el1
+    return el
   end
 
   def to_csv_record(fields = [])
@@ -261,13 +210,7 @@ class Node < ActiveRecord::Base
   end
 
   def tags
-    unless @tags
-      @tags = {}
-      self.node_tags.each do |tag|
-        @tags[tag.k] = tag.v
-      end
-    end
-    @tags
+    @tags ||= Hash[self.node_tags.collect { |t| [t.k, t.v] }]
   end
 
   def tags=(t)

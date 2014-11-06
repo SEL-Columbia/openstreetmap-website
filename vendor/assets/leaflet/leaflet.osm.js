@@ -2,7 +2,9 @@ L.OSM = {};
 
 L.OSM.TileLayer = L.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    url: document.location.protocol === 'https:' ?
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' :
+      'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     attribution: '© <a target="_parent" href="http://www.openstreetmap.org">OpenStreetMap</a> and contributors, under an <a target="_parent" href="http://www.openstreetmap.org/copyright">open license</a>'
   },
 
@@ -14,27 +16,52 @@ L.OSM.TileLayer = L.TileLayer.extend({
 
 L.OSM.Mapnik = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    url: document.location.protocol === 'https:' ?
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' :
+      'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    maxZoom: 19
   }
 });
 
 L.OSM.CycleMap = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+    url: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
+    attribution: "Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank'>Andy Allan</a>"
   }
 });
 
 L.OSM.TransportMap = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png'
+    url: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+    attribution: "Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank'>Andy Allan</a>"
   }
 });
 
 L.OSM.MapQuestOpen = L.OSM.TileLayer.extend({
   options: {
-    url: 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+    url: document.location.protocol === 'https:' ?
+      'https://otile{s}-s.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png' :
+      'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
     subdomains: '1234',
-    attribution: "Tiles courtesy of <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png'>"
+    attribution: document.location.protocol === 'https:' ?
+      "Tiles courtesy of <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a> <img src='https://developer.mapquest.com/content/osm/mq_logo.png'>" :
+      "Tiles courtesy of <a href='http://www.mapquest.com/' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png'>"
+  }
+});
+
+L.OSM.HOT = L.OSM.TileLayer.extend({
+  options: {
+    url: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    maxZoom: 20,
+    subdomains: 'abc',
+    attribution: "Tiles courtesy of <a href='http://hot.openstreetmap.org/' target='_blank'>Humanitarian OpenStreetMap Team</a>"
+  }
+});
+
+L.OSM.GridMap = L.OSM.TileLayer.extend({
+  options: {
+    url: OSM.GRIDMAPS_TILE_URL,
+    maxZoom: 17,
   }
 });
 
@@ -63,7 +90,9 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     for (var i = 0; i < features.length; i++) {
       var feature = features[i], layer;
 
-      if (feature.type === "node") {
+      if (feature.type === "changeset") {
+        layer = L.rectangle(feature.latLngBounds, this.options.styles.changeset);
+      } else if (feature.type === "node") {
         layer = L.circleMarker(feature.latLng, this.options.styles.node);
       } else {
         var latLngs = new Array(feature.nodes.length);
@@ -86,7 +115,7 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
   },
 
   buildFeatures: function (xml) {
-    var features = [],
+    var features = L.OSM.getChangesets(xml),
       nodes = L.OSM.getNodes(xml),
       ways = L.OSM.getWays(xml, nodes),
       relations = L.OSM.getRelations(xml, nodes, ways);
@@ -150,6 +179,25 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
 });
 
 L.Util.extend(L.OSM, {
+  getChangesets: function (xml) {
+    var result = [];
+
+    var nodes = xml.getElementsByTagName("changeset");
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i], id = node.getAttribute("id");
+      result.push({
+        id: id,
+        type: "changeset",
+        latLngBounds: L.latLngBounds(
+          [node.getAttribute("min_lat"), node.getAttribute("min_lon")],
+          [node.getAttribute("max_lat"), node.getAttribute("max_lon")]),
+        tags: this.getTags(node)
+      });
+    }
+
+    return result;
+  },
+
   getNodes: function (xml) {
     var result = {};
 

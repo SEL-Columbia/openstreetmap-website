@@ -25,9 +25,6 @@ class ExportController < ApplicationController
 
   caches_page :embed
 
-  def start
-  end
-
   #When the user clicks 'Export' we redirect to a URL which generates the export download
   def finish
     bbox = BoundingBox.from_lon_lat_params(params)
@@ -53,29 +50,25 @@ class ExportController < ApplicationController
       
       tmp_outfilename = File.join("tmp", outfilename)
       tmp_osmfilename = File.join("tmp", osmfilename)
-      # debugger
       mapper = OSM::Export::KML.new(tmp_outfilename)
+ 
+      # Use if we want to retrieve map xml from alternative URL (via cgimap for speed)
+      # uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
+      # 
+      ## handle exception?  
+      # map_osm_response = Net::HTTP.get_response(uri)
+
+      # File.open(tmp_osmfilename,'w') do |f|
+      #   f.write map_osm_response.body
+      #   f.close
+      # end
+
       mapper.instance_eval(File.read(rulefilename), rulefilename)
       
-      
-      uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
-      
-      # handle exception?  
-      map_osm_response = Net::HTTP.get_response(uri)
-
-      #  old way:  go direct to map_xml
-      #  doc = map_xml(bbox)
-      # doc = response.body
-
-      File.open(tmp_osmfilename,'w') do |f|
-        f.write map_osm_response.body
-        f.close
-      end
-
-      # debugger
+      doc = map_xml(bbox)
       # write to file for now to be compatible with osmlib export api
       # tmp_osmfile = File.open(tmp_osmfilename, "w")
-      # doc.save(tmp_osmfilename, :indent => true)
+      doc.save(tmp_osmfilename, :indent => true)
       # tmp_osmfile.close 
 
       parser = OSM::Export::Parser.new(tmp_osmfilename, mapper)
@@ -92,7 +85,7 @@ class ExportController < ApplicationController
       format = params[:mapnik_format]
       scale = params[:mapnik_scale]
 
-      redirect_to "http://parent.tile.openstreetmap.org/cgi-bin/export?bbox=#{bbox}&scale=#{scale}&format=#{format}"
+      redirect_to "http://render.openstreetmap.org/cgi-bin/export?bbox=#{bbox}&scale=#{scale}&format=#{format}"
     end
   end
 

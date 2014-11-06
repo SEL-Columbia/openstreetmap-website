@@ -48,7 +48,7 @@ en:
         body: "Body"
       diary_entry:
         user: "User"
-        title: "Title"
+        title: "Subject"
         latitude: "Latitude"
         longitude: "Longitude"
         language: "Language"
@@ -66,7 +66,7 @@ en:
         description: "Description"
       message:
         sender: "Sender"
-        title: "Title"
+        title: "Subject"
         body: "Body"
         recipient: "Recipient"
       user:
@@ -79,7 +79,7 @@ en:
   printable_name:
     with_id: "%{id}"
     with_version: "%{id}, v%{version}"
-    with_name: "%{name} (%{id})"
+    with_name_html: "%{name} (%{id})"
   editor:
     default: "Default (currently %{name})"
     potlatch:
@@ -95,96 +95,63 @@ en:
       name: "Remote Control"
       description: "Remote Control (JOSM or Merkaartor)"
   browse:
+    created: "Created"
+    closed: "Closed"
+    created_html: "Created <abbr title='%{title}'>%{time} ago</abbr>"
+    closed_html: "Closed <abbr title='%{title}'>%{time} ago</abbr>"
+    created_by_html: "Created <abbr title='%{title}'>%{time} ago</abbr> by %{user}"
+    deleted_by_html: "Deleted <abbr title='%{title}'>%{time} ago</abbr> by %{user}"
+    edited_by_html: "Edited <abbr title='%{title}'>%{time} ago</abbr> by %{user}"
+    closed_by_html: "Closed <abbr title='%{title}'>%{time} ago</abbr> by %{user}"
+    version: "Version"
+    in_changeset: "Changeset"
+    anonymous: "anonymous"
+    no_comment: "(no comment)"
+    part_of: "Part of"
+    download_xml: "Download XML"
+    view_history: "View History"
+    view_details: "View Details"
+    location: "Location:"
     changeset:
-      title: "Changeset"
-      changeset: "Changeset: %{id}"
+      title: "Changeset: %{id}"
+      belongs_to: "Author"
+      node: "Nodes (%{count})"
+      node_paginated: "Nodes (%{x}-%{y} of %{count})"
+      way: "Ways (%{count})"
+      way_paginated: "Ways (%{x}-%{y} of %{count})"
+      relation: "Relations (%{count})"
+      relation_paginated: "Relations (%{x}-%{y} of %{count})"
       changesetxml: "Changeset XML"
       osmchangexml: "osmChange XML"
       feed:
         title: "Changeset %{id}"
         title_comment: "Changeset %{id} - %{comment}"
-    navigation:
-      paging:
-        user:
-          prev: "« %{id}"
-          next: "%{id} »"
-        all:
-          prev: "« %{id}"
-          next: "%{id} »"
-      user:
-        name_changeset_tooltip: "View edits by %{user}"
-        prev_changeset_tooltip: "Previous edit by %{user}"
-        next_changeset_tooltip: "Next edit by %{user}"
-      all:
-        prev_node_tooltip: "Previous node"
-        next_node_tooltip: "Next node"
-        prev_way_tooltip: "Previous way"
-        next_way_tooltip: "Next way"
-        prev_relation_tooltip: "Previous relation"
-        next_relation_tooltip: "Next relation"
-        prev_changeset_tooltip: "Previous changeset"
-        next_changeset_tooltip: "Next changeset"
-        prev_note_tooltip: "Previous note"
-        next_note_tooltip: "Next note"
-    changeset_details:
-      created_at: "Created at:"
-      closed_at: "Closed at:"
-      belongs_to: "Belongs to:"
-      bounding_box: "Bounding box:"
-      no_bounding_box: "No bounding box has been stored for this changeset."
-      show_area_box: "Show Area Box"
-      box: "box"
-      has_nodes:
-        one: "Has the following %{count} node:"
-        other: "Has the following %{count} nodes:"
-      has_ways:
-        one:  "Has the following %{count} way:"
-        other: "Has the following %{count} ways:"
-      has_relations:
-        one:  "Has the following %{count} relation:"
-        other: "Has the following %{count} relations:"
-    common_details:
-      edited_at: "Edited at:"
-      edited_by: "Edited by:"
-      deleted_at: "Deleted at:"
-      deleted_by: "Deleted by:"
-      version: "Version:"
-      in_changeset: "In changeset:"
-      changeset_comment: "Comment:"
+    node:
+      title: "Node: %{name}"
+      history_title: "Node History: %{name}"
+    way:
+      title: "Way: %{name}"
+      history_title: "Way History: %{name}"
+      nodes: "Nodes"
+      also_part_of:
+        one: "part of way %{related_ways}"
+        other: "part of ways %{related_ways}"
+    relation:
+      title: "Relation: %{name}"
+      history_title: "Relation History: %{name}"
+      members: "Members"
+    relation_member:
+      entry: "%{type} %{name}"
+      entry_role: "%{type} %{name} as %{role}"
+      type:
+        node: "Node"
+        way: "Way"
+        relation: "Relation"
     containing_relation:
       entry: "Relation %{relation_name}"
       entry_role: "Relation %{relation_name} (as %{relation_role})"
-    map:
-      loading: "Loading..."
-      deleted: "Deleted"
-      larger:
-        area: "View area on larger map"
-        node: "View node on larger map"
-        way: "View way on larger map"
-        relation: "View relation on larger map"
-        note: "View note on larger map"
-      edit:
-        area: "Edit area"
-        node: "Edit node"
-        way: "Edit way"
-        relation: "Edit relation"
-        note: "Edit note"
-    node_details:
-      coordinates: "Coordinates:"
-      part_of: "Part of:"
-    node_history:
-      node_history: "Node History"
-      node_history_title: "Node History: %{node_name}"
-      download_xml: "Download XML"
-      view_details: "View details"
-    node:
-      node: "Node"
-      node_title: "Node: %{node_name}"
-      download_xml: "Download XML"
-      view_history: "View history"
-      edit: "Edit node"
     not_found:
-      sorry: "Sorry, the %{type} with the id %{id}, could not be found."
+      sorry: "Sorry, %{type} #%{id} could not be found."
       type:
         node: node
         way: way
@@ -197,9 +164,6 @@ en:
         way: way
         relation: relation
         changeset: changeset
-    paging_nav:
-      showing_page: "page"
-      of: "of"
     redacted:
       redaction: "Redaction %{id}"
       message_html: "Version %{version} of this %{type} cannot be shown as it has been redacted. Please see %{redaction_link} for details."
@@ -207,110 +171,42 @@ en:
         node: "node"
         way: "way"
         relation: "relation"
-    relation_details:
-      members: "Members:"
-      part_of: "Part of:"
-    relation_history:
-      relation_history: "Relation History"
-      relation_history_title: "Relation History: %{relation_name}"
-      download_xml: "Download XML"
-      view_details: "View details"
-    relation_member:
-      entry: "%{type} %{name}"
-      entry_role: "%{type} %{name} as %{role}"
-      type:
-        node: "Node"
-        way: "Way"
-        relation: "Relation"
-    relation:
-      relation: "Relation"
-      relation_title: "Relation: %{relation_name}"
-      download_xml: "Download XML"
-      view_history: "View history"
     start_rjs:
-      notes_layer_name: "Browse Notes"
-      data_layer_name: "Browse Map Data"
-      data_frame_title: "Data"
-      zoom_or_select: "Zoom in or select an area of the map to view"
-      view_data: "View data for current map view"
-      manually_select: "Manually select a different area"
-      hide_areas: "Hide areas"
-      show_areas: "Show areas"
-      loaded_an_area_with_num_features: "You have loaded an area which contains %{num_features} features. In general, some browsers may not cope well with displaying this quantity of data. Generally, browsers work best at displaying less than %{max_features} features at a time: doing anything else may make your browser slow/unresponsive. If you are sure you want to display this data, you may do so by clicking the button below."
+      feature_warning: "Loading %{num_features} features, which may make your browser slow or unresponsive. Are sure you want to display this data?"
       load_data: "Load Data"
-      unable_to_load_size: "Unable to load: Bounding box size of %{bbox_size} is too large (must be smaller than %{max_bbox_size})"
       loading: "Loading..."
-      show_history: "Show History"
-      wait: "Wait..."
-      history_for_feature: "History for %{feature}"
-      details: "Details"
-      private_user: "private user"
-      edited_by_user_at_timestamp: "Edited by %{user} at %{timestamp}"
-      object_list:
-        heading: "Object list"
-        back: "Back to object list"
-        type:
-          node: "Node"
-          way: "Way"
-          # There is no 'relation' type because it is not represented in OpenLayers
-        api: "Retrieve this area from the API"
-        details: "Details"
-        selected:
-          type:
-            node: "Node %{id}"
-            way: "Way %{id}"
-            # There is no 'relation' type because it is not represented in OpenLayers
-        history:
-          type:
-            node: "Node %{id}"
-            way: "Way %{id}"
-            # There is no 'relation' type because it is not represented in OpenLayers
     tag_details:
-      tags: "Tags:"
+      tags: "Tags"
       wiki_link:
         key: "The wiki description page for the %{key} tag"
         tag: "The wiki description page for the %{key}=%{value} tag"
+      wikidata_link: "The %{page} item on Wikidata"
       wikipedia_link: "The %{page} article on Wikipedia"
-    way_details:
-      nodes: "Nodes:"
-      part_of: "Part of:"
-      also_part_of:
-        one: "part of way %{related_ways}"
-        other: "part of ways %{related_ways}"
-    way_history:
-      way_history: "Way History"
-      way_history_title: "Way History: %{way_name}"
-      download_xml: "Download XML"
-      view_details: "View details"
-    way:
-      way: "Way"
-      way_title: "Way: %{way_name}"
-      download_xml: "Download XML"
-      view_history: "View history"
-      edit: "Edit way"
+      telephone_link: "Call %{phone_number}"
     note:
-      title: "Note"
-      open_title: "Unresolved note: %{note_name}"
-      closed_title: "Resolved note: %{note_name}"
-      opened: "Opened:"
-      last_modified: "Last modified:"
-      closed: "Closed:"
-      at_html: "%{when} ago"
-      at_by_html: "%{when} ago by %{user}"
-      description: "Description:"
-      comments: "Comments:"
+      title: "Note: %{id}"
+      new_note: "New Note"
+      description: "Description"
+      open_title: "Unresolved note #%{note_name}"
+      closed_title: "Resolved note #%{note_name}"
+      hidden_title: "Hidden note #%{note_name}"
+      open_by: "Created by %{user} <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      open_by_anonymous: "Created by anonymous <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      commented_by: "Comment from %{user} <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      commented_by_anonymous: "Comment from anonymous <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      closed_by: "Resolved by %{user} <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      closed_by_anonymous: "Resolved by anonymous <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      reopened_by: "Reactivated by %{user} <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      reopened_by_anonymous: "Reactivated by anonymous <abbr title='%{exact_time}'>%{when} ago</abbr>"
+      hidden_by: "Hidden by %{user} <abbr title='%{exact_time}'>%{when} ago</abbr>"
   changeset:
     changeset_paging_nav:
       showing_page: "Page %{page}"
       next: "Next »"
       previous: "« Previous"
     changeset:
-      still_editing: "(still editing)"
       anonymous: "Anonymous"
-      no_comment: "(none)"
       no_edits: "(no edits)"
-      show_area_box: "show area box"
-      big_area: "(big)"
       view_changeset_details: "View changeset details"
     changesets:
       id: "ID"
@@ -321,24 +217,15 @@ en:
     list:
       title: "Changesets"
       title_user: "Changesets by %{user}"
-      title_bbox: "Changesets within %{bbox}"
-      title_user_bbox: "Changesets by %{user} within %{bbox}"
       title_friend: "Changesets by your friends"
       title_nearby: "Changesets by nearby users"
-      heading: "Changesets"
-      heading_user: "Changesets"
-      heading_bbox: "Changesets"
-      heading_user_bbox: "Changesets"
-      heading_friend: "Changesets"
-      heading_nearby: "Changesets"
-      description: "Browse recent contributions to the map"
-      description_user: "Changesets by %{user}"
-      description_bbox: "Changesets within %{bbox}"
-      description_user_bbox: "Changesets by %{user} within %{bbox}"
-      description_friend: "Changesets by your friends"
-      description_nearby: "Changesets by nearby users"
-      empty_user_html: "It looks you haven't made any edits yet. To get started, check out the <a href='http://wiki.openstreetmap.org/wiki/Beginners_Guide_1.3'>Beginners Guide</a>."
-      empty_anon_html: "No edits made yet."
+      empty: "No changesets found."
+      empty_area: "No changesets in this area."
+      empty_user: "No changesets by this user."
+      no_more: "No more changesets found."
+      no_more_area: "No more changesets in this area."
+      no_more_user: "No more changesets by this user."
+      load_more: "Load more"
     timeout:
       sorry: "Sorry, the list of changesets you requested took too long to retrieve."
   diary_entry:
@@ -416,6 +303,7 @@ en:
       newer_comments: "Newer Comments"
       older_comments: "Older Comments"
   export:
+    title: "Export"
     start:
       area_to_export: "Area to Export"
       manually_select: "Manually select a different area"
@@ -427,8 +315,23 @@ en:
       licence: "Licence"
       export_details: 'OpenStreetMap data is licensed under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Data Commons Open Database License</a> (ODbL).'
       too_large:
-        heading: "Area Too Large"
-        body: "This area is too large to be exported as OpenStreetMap XML Data. Please zoom in or select a smaller area."
+        advice: "If the above export fails, please consider using one of the sources listed below:"
+        body: "This area is too large to be exported as OpenStreetMap XML Data. Please zoom in or select a smaller area, or use one of the sources listed below for bulk data downloads."
+        planet:
+          title: "Planet OSM"
+          description: "Regularly-updated copies of the complete OpenStreetMap database"
+        overpass:
+          title: "Overpass API"
+          description: "Download this bounding box from a mirror of the OpenStreetMap database"
+        geofabrik:
+          title: "Geofabrik Downloads"
+          description: "Regularly-updated extracts of continents, countries, and selected cities"
+        metro:
+          title: "Metro Extracts"
+          description: "Extracts for major world cities and their surrounding areas"
+        other:
+          title: "Other Sources"
+          description: "Additional sources listed on the OpenStreetMap wiki"
       options: "Options"
       format: "Format"
       scale: "Scale"
@@ -441,14 +344,6 @@ en:
       output: "Output"
       paste_html: "Paste HTML to embed in website"
       export_button: "Export"
-    start_rjs:
-      export: "Export"
-      drag_a_box: "Drag a box on the map to select an area"
-      manually_select: "Manually select a different area"
-      click_add_marker: "Click on the map to add a marker"
-      change_marker: "Change marker position"
-      add_marker: "Add a marker to the map"
-      view_larger_map: "View Larger Map"
   geocoder:
     search:
       title:
@@ -458,9 +353,15 @@ en:
         ca_postcode: 'Results from <a href="http://geocoder.ca/">Geocoder.CA</a>'
         osm_nominatim: 'Results from <a href="http://nominatim.openstreetmap.org/">OpenStreetMap Nominatim</a>'
         geonames: 'Results from <a href="http://www.geonames.org/">GeoNames</a>'
+        osm_nominatim_reverse: 'Results from <a href="http://nominatim.openstreetmap.org/">OpenStreetMap Nominatim</a>'
+        geonames_reverse: 'Results from <a href="http://www.geonames.org/">GeoNames</a>'
     search_osm_nominatim:
       prefix_format: "%{name}"
       prefix:
+        aerialway:
+          chair_lift: "Chair Lift"
+          drag_lift: "Drag Lift"
+          station: "Aerialway Station"
         aeroway:
           aerodrome: "Aerodrome"
           apron: "Apron"
@@ -553,6 +454,7 @@ en:
           shower: "Shower"
           social_centre: "Social Centre"
           social_club: "Social Club"
+          social_facility: "Social Facility"
           studio: "Studio"
           supermarket: "Supermarket"
           swimming_pool: "Swimming Pool"
@@ -582,6 +484,9 @@ en:
           "yes": "Bridge"
         building:
           "yes": "Building"
+        emergency:
+          fire_hydrant: "Fire Hydrant"
+          phone: "Emergency Phone"
         highway:
           bridleway: "Bridleway"
           bus_guideway: "Guided Bus Lane"
@@ -603,6 +508,7 @@ en:
           platform: "Platform"
           primary: "Primary Road"
           primary_link: "Primary Road"
+          proposed: "Proposed Road"
           raceway: "Raceway"
           residential: "Residential"
           rest_area: "Rest Area"
@@ -613,6 +519,7 @@ en:
           services: "Motorway Services"
           speed_camera: "Speed Camera"
           steps: "Steps"
+          street_lamp: "Street Lamp"
           stile: "Stile"
           tertiary: "Tertiary Road"
           tertiary_link: "Tertiary Road"
@@ -629,6 +536,7 @@ en:
           building: "Building"
           castle: "Castle"
           church: "Church"
+          citywalls: "City Walls"
           fort: "Fort"
           house: "House"
           icon: "Icon"
@@ -638,6 +546,7 @@ en:
           monument: "Monument"
           museum: "Museum"
           ruins: "Ruins"
+          tomb: "Tomb"
           tower: "Tower"
           wayside_cross: "Wayside Cross"
           wayside_shrine: "Wayside Shrine"
@@ -776,6 +685,7 @@ en:
           locality: "Locality"
           moor: "Moor"
           municipality: "Municipality"
+          neighbourhood: "Neighbourhood"
           postcode: "Postcode"
           region: "Region"
           sea: "Sea"
@@ -801,8 +711,10 @@ en:
           narrow_gauge: "Narrow Gauge Railway"
           platform: "Railway Platform"
           preserved: "Preserved Railway"
+          proposed: "Proposed Railway"
           spur: "Railway Spur"
           station: "Railway Station"
+          stop: "Railway Stop"
           subway: "Subway Station"
           subway_entrance: "Subway Entrance"
           switch: "Railway Points"
@@ -818,9 +730,11 @@ en:
           beverages: "Beverages Shop"
           bicycle: "Bicycle Shop"
           books: "Book Shop"
+          boutique: "Boutique"
           butcher: "Butcher"
           car: "Car Shop"
           car_parts: "Car Parts"
+          car_repair: "Car Repair"
           carpet: "Carpet Shop"
           car_repair: "Car Repair"
           charity: "Charity Shop"
@@ -831,6 +745,7 @@ en:
           convenience: "Convenience Store"
           copyshop: "Copy Shop"
           cosmetics: "Cosmetics Shop"
+          deli: "Deli"
           department_store: "Department Store"
           discount: "Discount Items Shop"
           doityourself: "Do-It-Yourself"
@@ -867,17 +782,21 @@ en:
           organic: "Organic Food Shop"
           outdoor: "Outdoor Shop"
           pet: "Pet Shop"
+          pharmacy: "Pharmacy"
           photo: "Photo Shop"
           salon: "Salon"
+          second_hand: "Second-hand Shop"
           shoes: "Shoe Shop"
           shopping_centre: "Shopping Centre"
           sports: "Sports Shop"
           stationery: "Stationery Shop"
           supermarket: "Supermarket"
+          tailor: "Tailor"
           toys: "Toy Shop"
           travel_agency: "Travel Agency"
           video: "Video Shop"
           wine: "Off License"
+          "yes": "Shop"
         tourism:
           alpine_hut: "Alpine Hut"
           artwork: "Artwork"
@@ -900,6 +819,7 @@ en:
           viewpoint: "Viewpoint"
           zoo: "Zoo"
         tunnel:
+          culvert: "Culvert"
           "yes": "Tunnel"
         waterway:
           artificial: "Artificial Waterway"
@@ -923,6 +843,14 @@ en:
           waterfall: "Waterfall"
           water_point: "Water Point"
           weir: "Weir"
+      admin_levels:
+        level2: "Country Boundary"
+        level4: "State Boundary"
+        level5: "Region Boundary"
+        level6: "County Boundary"
+        level8: "City Boundary"
+        level9: "Village Boundary"
+        level10: "Suburb Boundary"
     description:
       title:
         osm_nominatim: 'Location from <a href="http://nominatim.openstreetmap.org/">OpenStreetMap Nominatim</a>'
@@ -955,39 +883,27 @@ en:
       h1: OpenStreetMap
     logo:
       alt_text: OpenStreetMap logo
-    welcome_user_link_tooltip: Your user page
-    home: home
-    home_tooltip: Go to home location
-    inbox_html: "inbox %{count}"
-    inbox_tooltip:
-      zero: Your inbox contains no unread messages
-      one: Your inbox contains 1 unread message
-      other: Your inbox contains %{count} unread messages
-    logout: logout
-    logout_tooltip: "Log out"
-    log_in: log in
+    home: Go to Home Location
+    logout: Log Out
+    log_in: Log In
     log_in_tooltip: Log in with an existing account
-    sign_up: sign up
+    sign_up: Sign Up
+    start_mapping: Start Mapping
     sign_up_tooltip: Create an account for editing
-    view: View
-    view_tooltip: View the map
     edit: Edit
     history: History
     export: Export
-    export_tooltip: Export map data
+    data: Data
+    export_data: Export Data
     gps_traces: GPS Traces
     gps_traces_tooltip: Manage GPS traces
     user_diaries: User Diaries
     user_diaries_tooltip: View user diaries
     edit_with: Edit with %{editor}
     tag_line: The Free Wiki World Map
-    intro_1: "OpenStreetMap is a free worldwide map, created by people like you."
-    intro_2_html: "The data is free to %{download} and %{use} under its %{license}. %{create_account} to improve the map."
+    intro_header: Welcome to OpenStreetMap!
+    intro_text: OpenStreetMap is a map of the world, created by people like you and free to use under an open license.
     intro_2_create_account: "Create a user account"
-    intro_2_license: "open license"
-    intro_2_use: "use"
-    intro_2_download: "download"
-    intro_2_use_url: "http://wiki.openstreetmap.org/wiki/Using_OpenStreetMap"
     partners_html: "Hosting is supported by %{ucl}, %{ic} and %{bytemark}, and other %{partners}."
     partners_ucl: "the UCL VR Centre"
     partners_ic: "Imperial College London"
@@ -997,17 +913,9 @@ en:
     osm_offline: "The OpenStreetMap database is currently offline while essential database maintenance work is carried out."
     osm_read_only: "The OpenStreetMap database is currently in read-only mode while essential database maintenance work is carried out."
     donate: "Support OpenStreetMap by %{link} to the Hardware Upgrade Fund."
-    donate_link_text: donating
     help: Help
-    help_centre: Help Centre
-    help_url: http://help.openstreetmap.org/
-    help_title: Help site for the project
-    wiki: Wiki
-    wiki_url: http://wiki.openstreetmap.org/
-    wiki_title: Wiki site for the project
-    documentation: Documentation
-    documentation_title: Documentation for the project
-    copyright: "Copyright & License"
+    about: About
+    copyright: Copyright
     community: Community
     community_blogs: "Community Blogs"
     community_blogs_title: "Blogs from members of the OpenStreetMap community"
@@ -1016,7 +924,12 @@ en:
     make_a_donation:
       title: Support OpenStreetMap with a monetary donation
       text: Make a Donation
-
+    learn_more: "Learn More"
+    more: More
+    sotm_header: State of the Map 2014
+    sotm_line_1: 8th Annual Conference
+    sotm_line_2: November 7th-9th 2014
+    sotm_line_3: Buenos Aires, Argentina
   license_page:
     foreign:
       title: About this translation
@@ -1043,7 +956,7 @@ en:
       intro_3_html: |
         The cartography in our map tiles, and our documentation, are
         licensed under the <a href="http://creativecommons.org/licenses/by-sa/2.0/">Creative
-        Commons Attribution-ShareAlike 2.0</a> license (CC-BY-SA).
+        Commons Attribution-ShareAlike 2.0</a> license (CC BY-SA).
       credit_title_html: How to credit OpenStreetMap
       credit_1_html: |
         We require that you use the credit &ldquo;&copy; OpenStreetMap
@@ -1051,7 +964,7 @@ en:
       credit_2_html: |
         You must also make it clear that the data is available under the Open
         Database License, and if using our map tiles, that the cartography is
-        licensed as CC-BY-SA. You may do this by linking to
+        licensed as CC BY-SA. You may do this by linking to
         <a href="http://www.openstreetmap.org/copyright">this copyright page</a>.
         Alternatively, and as a requirement if you are distributing OSM in a
         data form, you can name and link directly to the license(s). In media
@@ -1086,13 +999,18 @@ en:
         <a href="http://data.wien.gv.at/">Stadt Wien</a> (under
         <a href="http://creativecommons.org/licenses/by/3.0/at/deed.de">CC BY</a>),
         <a href="http://www.vorarlberg.at/vorarlberg/bauen_wohnen/bauen/vermessung_geoinformation/weitereinformationen/services/wmsdienste.htm">Land Vorarlberg</a> and
-        Land Tirol (under <a href="http://www.tirol.gv.at/applikationen/e-government/data/nutzungsbedingungen/">CC-BY AT with amendments</a>).
+        Land Tirol (under <a href="http://www.tirol.gv.at/applikationen/e-government/data/nutzungsbedingungen/">CC BY AT with amendments</a>).
       contributors_ca_html: |
         <strong>Canada</strong>: Contains data from
         GeoBase&reg;, GeoGratis (&copy; Department of Natural
         Resources Canada), CanVec (&copy; Department of Natural
         Resources Canada), and StatCan (Geography Division,
         Statistics Canada).
+      contributors_fi_html: |
+        <strong>Finland</strong>: Contains data from the
+        National Land Survey of Finland's Topographic Database
+        and other datasets, under the
+        <a href="http://www.maanmittauslaitos.fi/en/NLS_open_data_licence_version1_20120501">NLSFI License</a>.
       contributors_fr_html: |
         <strong>France</strong>: Contains data sourced from
         Direction Générale des Impôts.
@@ -1130,6 +1048,117 @@ en:
         to our <a href="http://www.osmfoundation.org/wiki/License/Takedown_procedure">takedown
         procedure</a> or file directly at our
         <a href="http://dmca.openstreetmap.org/">on-line filing page</a>.
+  welcome_page:
+    title: Welcome!
+    introduction_html: |
+      Welcome to OpenStreetMap, the free and editable map of the world. Now that you're signed
+      up, you're all set to get started mapping. Here's a quick guide with the most important
+      things you need to know.
+    whats_on_the_map:
+      title: What's on the Map
+      on_html: |
+        OpenStreetMap is a place for mapping things that are both <em>real and current</em> -
+        it includes millions of buildings, roads, and other details about places. You can map
+        whatever real-world features are interesting to you.
+      off_html: |
+        What it <em>doesn't</em> include is opinionated data like ratings, historical or
+        hypothetical features, and data from copyrighted sources. Unless you have special
+        permission, don't copy from online or paper maps.
+    basic_terms:
+      title: Basic Terms For Mapping
+      paragraph_1_html: |
+        OpenStreetMap has some of its own lingo. Here are a few key words that'll come in handy.
+      editor_html: |
+        An <strong>editor</strong> is a program or website you can use to edit the map.
+      node_html: |
+        A <strong>node</strong> is a point on the map, like a single restaurant or a tree.
+      way_html: |
+        A <strong>way</strong> is a line or area, like a road, stream, lake or building.
+      tag_html: |
+        A <strong>tag</strong> is a bit of data about a node or way, like a
+        restaurant's name or a road's speed limit.
+    questions:
+      title: Any questions?
+      paragraph_1_html: |
+        OpenStreetMap has several resources for learning about the project, asking and answering
+        questions, and collaboratively discussing and documenting mapping topics.
+        <a href='%{help_url}'>Get help here</a>.
+    start_mapping: Start Mapping
+    add_a_note:
+      title: No Time To Edit? Add a Note!
+      paragraph_1_html: |
+        If you just want something small fixed and don't have the time to sign up and learn how to edit, it's
+        easy to add a note.
+      paragraph_2_html: |
+        Just go to <a href='%{map_url}'>the map</a> and click the note icon:
+        <span class='icon note'></span>. This will add a marker to the map, which you can move
+        by dragging. Add your message, then click save, and other mappers will investigate.
+  fixthemap:
+    title: Report a problem / Fix the map
+    how_to_help:
+      title: How to Help
+      join_the_community:
+        title: Join the community
+        explanation_html: |
+          If you have noticed a problem with our map data, for example a road is missing or your address, the best way to
+          proceed is to join the OpenStreetMap community and add or repair the data yourself. 
+      add_a_note:
+        instructions_html: |
+          Just click <a class='icon note'></a> or the same icon on the map display.
+          This will add a marker to the map, which you can move
+          by dragging. Add your message, then click save, and other mappers will investigate.
+    other_concerns:
+      title: Other concerns
+      explanation_html: |
+        If you have concerns about how our data is being used or about the contents please consult our
+        <a href='/copyright'>copyright page</a> for more legal information, or contact the appropriate 
+        <a href='http://wiki.osmfoundation.org/wiki/Working_Groups'>OSMF working group</a>.  
+  help_page:
+    title: Getting Help
+    introduction: |
+      OpenStreetMap has several resources for learning about the project, asking and answering questions,
+      and collaboratively discussing and documenting mapping topics.
+    welcome:
+      url: /welcome
+      title: Welcome to OSM
+      description: Start with this quick guide covering the OpenStreetMap basics.
+    help:
+      url: https://help.openstreetmap.org/
+      title: help.openstreetmap.org
+      description: Ask a question or look up answers on OSM's question-and-answer site.
+    wiki:
+      url: http://wiki.openstreetmap.org/
+      title: wiki.openstreetmap.org
+      description: Browse the wiki for in-depth OSM documentation.
+  about_page:
+    next: Next
+    copyright_html: <span>&copy;</span>OpenStreetMap<br>contributors
+    used_by: "%{name} powers map data on hundreds of web sites, mobile apps, and hardware devices"
+    lede_text: |
+      OpenStreetMap is built by a community of mappers that contribute and maintain data
+      about roads, trails, cafés, railway stations, and much more, all over the world.
+    local_knowledge_title: Local Knowledge
+    local_knowledge_html: |
+      OpenStreetMap emphasizes local knowledge. Contributors use
+      aerial imagery, GPS devices, and low-tech field maps to verify that OSM
+      is accurate and up to date.
+    community_driven_title: Community Driven
+    community_driven_html: |
+      OpenStreetMap's community is diverse, passionate, and growing every day.
+      Our contributors include enthusiast mappers, GIS professionals, engineers
+      running the OSM servers, humanitarians mapping disaster-affected areas,
+      and many more.
+      To learn more about the community, see the <a href='%{diary_path}'>user diaries</a>,
+      <a href='http://blogs.openstreetmap.org/'>community blogs</a>, and
+      the <a href='http://www.osmfoundation.org/'>OSM Foundation</a> website.
+    open_data_title: Open Data
+    open_data_html: |
+      OpenStreetMap is <i>open data</i>: you are free to use it for any purpose
+      as long as you credit OpenStreetMap and its contributors. If you alter or
+      build upon the data in certain ways, you may distribute the result only
+      under the same licence. See the <a href='%{copyright_path}'>Copyright and
+      License page</a> for details.
+    partners_title: Partners
   notifier:
     diary_comment_notification:
       subject: "[OpenStreetMap] %{user} commented on your diary entry"
@@ -1140,8 +1169,7 @@ en:
       subject_header: "[OpenStreetMap] %{subject}"
       hi: "Hi %{to_user},"
       header: "%{from_user} has sent you a message through OpenStreetMap with the subject %{subject}:"
-      footer1: "You can also read the message at %{readurl}"
-      footer2: "and you can reply at %{replyurl}"
+      footer_html: "You can also read the message at %{readurl} and you can reply at %{replyurl}"
     friend_notification:
       subject: "[OpenStreetMap] %{user} added you as a friend"
       had_added_you: "%{user} has added you as a friend on OpenStreetMap."
@@ -1168,29 +1196,7 @@ en:
       created: "Someone (hopefully you) just created an account at %{site_url}."
       wait_for_confirm: "We will notify you once your account has been confirmed."
       confirm: "Before we do anything else, we need to confirm that this request came from you, so if it did then please click the link below to confirm your account:"
-      welcome: "We would like to welcome you and provide you with some additional information to get you started."
-    signup_confirm_plain:
-      introductory_video: "You can watch an introductory video to OpenStreetMap here:"
-      more_videos: "There are more videos here:"
-      the_wiki: "Get reading about OpenStreetMap on the wiki:"
-      the_wiki_url: "http://wiki.openstreetmap.org/wiki/Beginners%27_guide"
-      blog_and_twitter: "Catch up with the latest news via the OpenStreetMap blog or Twitter:"
-      opengeodata: "OpenGeoData.org is OpenStreetMap founder Steve Coast's blog, and it has podcasts too:"
-      ask_questions: "You can ask any questions you may have about OpenStreetMap at our question and answer site:"
-      wiki_signup: "You may also want to sign up to the OpenStreetMap wiki at:"
-      wiki_signup_url: "http://wiki.openstreetmap.org/index.php?title=Special:Userlogin&type=signup&returnto=Main_Page"
-      user_wiki_page: "It is recommended that you create a user wiki page, which includes category tags noting where you are, such as [[Category:Users_in_London]]."
-      current_user: "A list of current users in categories, based on where in the world they are, is available from:"
-    signup_confirm_html:
-      introductory_video: "You can watch an %{introductory_video_link}."
-      video_to_openstreetmap: "introductory video to OpenStreetMap"
-      more_videos: "There are %{more_videos_link}."
-      more_videos_here: "more videos here"
-      get_reading: Get reading about OpenStreetMap <a href="http://wiki.openstreetmap.org/wiki/Beginners%27_guide">on the wiki</a>, catch up with the latest news via the <a href="http://blog.openstreetmap.org/">OpenStreetMap blog</a> or <a href="http://twitter.com/openstreetmap">Twitter</a>, or browse through OpenStreetMap founder Steve Coast's <a href="http://www.opengeodata.org/">OpenGeoData blog</a> for the potted history of the project, which has <a href="http://www.opengeodata.org/?cat=13">podcasts to listen to</a> also!
-      ask_questions: You can ask any questions you may have about OpenStreetMap at our <a href="http://help.openstreetmap.org/">question and answer site</a>.
-      wiki_signup: 'You may also want to <a href="http://wiki.openstreetmap.org/index.php?title=Special:Userlogin&type=signup&returnto=Main_Page">sign up to the OpenStreetMap wiki</a>.'
-      user_wiki_page: 'It is recommended that you create a user wiki page, which includes category tags noting where you are, such as <a href="http://wiki.openstreetmap.org/wiki/Category:Users_in_London">[[Category:Users_in_London]]</a>.'
-      current_user: 'A list of current users in categories, based on where in the world they are, is available from <a href="http://wiki.openstreetmap.org/wiki/Category:Users_by_geographical_region">Category:Users_by_geographical_region</a>.'
+      welcome: "After you confirm your account, we'll provide you with some additional information to get you started."
     email_confirm:
       subject: "[OpenStreetMap] Confirm your email address"
     email_confirm_plain:
@@ -1224,11 +1230,16 @@ en:
         subject_other: "[OpenStreetMap] %{commenter} has resolved a note you are interested in"
         your_note: "%{commenter} has resolved one of your map notes near %{place}."
         commented_note: "%{commenter} has resolved a map note you have commented on. The note is near %{place}."
+      reopened:
+        subject_own: "[OpenStreetMap] %{commenter} has reactivated one of your notes"
+        subject_other: "[OpenStreetMap] %{commenter} has reactivated a note you are interested in"
+        your_note: "%{commenter} has reactivated one of your map notes near %{place}."
+        commented_note: "%{commenter} has reactivated a map note you have commented on. The note is near %{place}."
       details: "More details about the note can be found at %{url}."
   message:
     inbox:
       title: "Inbox"
-      my_inbox: "My inbox"
+      my_inbox: "My Inbox"
       outbox: "outbox"
       messages: "You have %{new_messages} and %{old_messages}"
       new_messages:
@@ -1282,9 +1293,8 @@ en:
       date: "Date"
       reply_button: "Reply"
       unread_button: "Mark as unread"
-      back_to_inbox: "Back to inbox"
+      back: "Back"
       to: "To"
-      back_to_outbox: "Back to outbox"
       wrong_user: "You are logged in as `%{user}' but the message you have asked to read was not sent by or to that user. Please login as the correct user in order to read it."
     sent_message_summary:
       delete_button: "Delete"
@@ -1326,10 +1336,7 @@ en:
       where_am_i: "Where am I?"
       where_am_i_title: Describe the current location using the search engine
       submit_text: "Go"
-      search_help: "examples: 'Alkmaar', 'Regent Street, Cambridge', 'CB2 5AQ', or 'post offices near Lünen' <a href='http://wiki.openstreetmap.org/wiki/Search'>more examples...</a>"
     key:
-      map_key: "Map Key"
-      map_key_tooltip: "Key for the map"
       table:
         entry:
           motorway: "Motorway"
@@ -1515,6 +1522,13 @@ en:
     offline:
       heading: "GPX Storage Offline"
       message: "The GPX file storage and upload system is currently unavailable."
+    georss:
+      title: "OpenStreetMap GPS Traces"
+    description:
+      description_with_count:
+        one: "GPX file with %{count} point from %{user}"
+        other: "GPX file with %{count} points from %{user}"
+      description_without_count: "GPX file from %{user}"
   application:
     require_cookies:
       cookies_needed: "You appear to have cookies disabled - please enable cookies in your browser before continuing."
@@ -1525,6 +1539,7 @@ en:
       need_to_see_terms: "Your access to the API is temporarily suspended. Please log-in to the web interface to view the Contributor Terms. You do not need to agree, but you must view them."
   oauth:
     oauthorize:
+      title: "Authorize access to your account"
       request_access: "The application %{app_name} is requesting access to your account, %{user}. Please check whether you would like the application to have the following capabilities. You may choose as many or as few as you like."
       allow_to: "Allow the client application to:"
       allow_read_prefs:  "read your user preferences."
@@ -1534,6 +1549,14 @@ en:
       allow_read_gpx:    "read your private GPS traces."
       allow_write_gpx:   "upload GPS traces."
       allow_write_notes: "modify notes."
+    oauthorize_success:
+      title: "Authorization request allowed"
+      allowed: "You have granted application %{app_name} access to your account."
+      verification: "The verification code is %{code}."
+    oauthorize_failure:
+      title: "Authorization request failed"
+      denied: "You have denied application %{app_name} access to your account."
+      invalid: "The authorization token is not valid."
     revoke:
       flash: "You've revoked the token for %{application}"
   oauth_clients:
@@ -1607,7 +1630,7 @@ en:
       login_button: "Login"
       register now: Register now
       with username: "Already have an OpenStreetMap account? Please login with your username and password:"
-      with openid: "Alternatively please use your OpenID to login:"
+      with openid: "Alternatively, use OpenID to login:"
       new to osm: New to OpenStreetMap?
       to make changes: To make changes to the OpenStreetMap data, you must have an account.
       create account minute: Create an account. It only takes a minute.
@@ -1628,9 +1651,6 @@ en:
         yahoo:
           title: Login with Yahoo
           alt: Login with a Yahoo OpenID
-        myopenid:
-          title: Login with myOpenID
-          alt: Login with a myOpenID OpenID
         wordpress:
           title: Login with Wordpress
           alt: Login with a Wordpress OpenID
@@ -1658,11 +1678,15 @@ en:
       flash changed: "Your password has been changed."
       flash token bad: "Did not find that token, check the URL maybe?"
     new:
-      title: "Create account"
-      heading: "Create a User Account"
+      title: "Sign Up"
       no_auto_account_create: "Unfortunately we are not currently able to create an account for you automatically."
       contact_webmaster: 'Please contact the <a href="mailto:webmaster@openstreetmap.org">webmaster</a> to arrange for an account to be created - we will try and deal with the request as quickly as possible.'
-      fill_form: "Fill in the form and we will send you a quick email to activate your account."
+      about:
+        header: Free and editable
+        html: |
+          <p>Unlike other maps, OpenStreetMap is completely created by people like you,
+          and it's free for anyone to fix, update, download and use.</p>
+          <p>Sign up to get started contributing. We'll send an email to confirm your account.</p>
       license_agreement: 'When you confirm your account you will need to agree to the <a href="http://www.osmfoundation.org/wiki/License/Contributor_Terms">contributor terms</a>.'
       email address: "Email Address:"
       confirm email address: "Confirm Email Address:"
@@ -1684,16 +1708,14 @@ en:
             with your OpenID in your user settings.
           </li>
         </ul>
-      continue: Continue
-      flash welcome: "Thanks for signing up. We've sent a welcome message to %{email} with some hints on getting started."
-      flash create success message: "Thanks for signing up. We've sent a confirmation note to %{email} and as soon as you confirm your account you'll be able to get mapping.<br /><br />If you use an antispam system which sends confirmation requests then please make sure you whitelist webmaster@openstreetmap.org as we are unable to reply to any confirmation requests."
+      continue: Sign Up
       terms accepted: "Thanks for accepting the new contributor terms!"
       terms declined: "We are sorry that you have decided to not accept the new Contributor Terms. For more information, please see <a href=\"%{url}\">this wiki page</a>."
       terms declined url: http://wiki.openstreetmap.org/wiki/Contributor_Terms_Declined
     terms:
       title: "Contributor terms"
       heading: "Contributor terms"
-      read and accept: "Please read the agreement below and press the agree button to confirm that you accept the terms of this agreement for your existing and future contributions."
+      read and accept: "Please read the agreement and press the agree button to confirm that you accept the terms of this agreement for your existing and future contributions."
       consider_pd: "In addition to the above agreement, I consider my contributions to be in the Public Domain"
       consider_pd_why: "what's this?"
       consider_pd_why_url: http://www.osmfoundation.org/wiki/License/Why_would_I_want_my_contributions_to_be_public_domain
@@ -1702,7 +1724,8 @@ en:
       declined: "http://wiki.openstreetmap.org/wiki/Contributor_Terms_Declined"
       decline: "Decline"
       you need to accept or decline: "Please read and then either accept or decline the new Contributor Terms to continue."
-      legale_select: "Please select your country of residence:"
+      private_fork_terms:  "Data collected will be available to Columbia U and collaborators"
+      legale_select: "Country of residence:"
       legale_names:
         france: "France"
         italy: "Italy"
@@ -1712,23 +1735,25 @@ en:
       heading: "The user %{user} does not exist"
       body: "Sorry, there is no user with the name %{user}. Please check your spelling, or maybe the link you clicked is wrong."
     view:
-      my diary: my diary
+      my diary: My Diary
       new diary entry: new diary entry
-      my edits: my edits
-      my traces: my traces
-      my notes: my map notes
-      my settings: my settings
-      my comments: my comments
+      my edits: My Edits
+      my traces: My Traces
+      my notes: My Notes
+      my messages: My Messages
+      my profile: My Profile
+      my settings: My Settings
+      my comments: My Comments
       oauth settings: oauth settings
-      blocks on me: blocks on me
-      blocks by me: blocks by me
-      send message: send message
-      diary: diary
-      edits: edits
-      traces: traces
-      notes: map notes
-      remove as friend: unfriend
-      add as friend: add friend
+      blocks on me: Blocks on Me
+      blocks by me: Blocks by Me
+      send message: Send Message
+      diary: Diary
+      edits: Edits
+      traces: Traces
+      notes: Map Notes
+      remove as friend: Unfriend
+      add as friend: Add Friend
       mapper since: "Mapper since:"
       ago: "(%{time_in_words_ago} ago)"
       ct status: "Contributor terms:"
@@ -1761,7 +1786,7 @@ en:
           moderator: "Revoke moderator access"
       block_history: "blocks received"
       moderator_history: "blocks given"
-      comments: "comments"
+      comments: "Comments"
       create_block: "block this user"
       activate_user: "activate this user"
       deactivate_user: "deactivate this user"
@@ -1830,14 +1855,16 @@ en:
       flash update success confirm needed: "User information updated successfully. Check your email for a note to confirm your new email address."
       flash update success: "User information updated successfully."
     confirm:
-      heading: Confirm a user account
+      heading: Check your email!
+      introduction_1: |
+        We sent you a confirmation email.
+      introduction_2: |
+        Confirm your account by clicking on the link in the email and you'll be able to start mapping.
       press confirm button: "Press the confirm button below to activate your account."
       button: Confirm
-      success: "Confirmed your account, thanks for signing up!"
-      before you start: "We know you're probably in a hurry to start mapping, but before you do you might like to fill in some more information about yourself in the form below."
       already active: "This account has already been confirmed."
-      unknown token: "That token doesn't seem to exist."
-      reconfirm: "If it's been a while since you signed up you might need to <a href=\"%{reconfirm}\">send yourself a new confirmation email</a>."
+      unknown token: "That confirmation code has expired or does not exist."
+      reconfirm_html: "If you need us to resend the confirmation email, <a href=\"%{reconfirm}\">click here</a>."
     confirm_resend:
       success: "We've sent a new confirmation note to %{email} and as soon as you confirm your account you'll be able to get mapping.<br /><br />If you use an antispam system which sends confirmation requests then please make sure you whitelist webmaster@openstreetmap.org as we are unable to reply to any confirmation requests."
       failure: "User %{name} not found."
@@ -2011,9 +2038,10 @@ en:
       title: "OpenStreetMap Notes"
       description_area: "A list of notes, reported, commented on or closed in your area [(%{min_lat}|%{min_lon}) -- (%{max_lat}|%{max_lon})]"
       description_item: "An rss feed for note %{id}"
+      opened: "new note (near %{place})"
+      commented: "new comment (near %{place})"
       closed: "closed note (near %{place})"
-      new: "new note (near %{place})"
-      comment: "new comment (near %{place})"
+      reopened: "reactivated note (near %{place})"
     entry:
       comment: Comment
       full: Full note
@@ -2028,45 +2056,71 @@ en:
       last_changed: "Last changed"
       ago_html: "%{when} ago"
   javascripts:
+    close: Close
+    share:
+      title: "Share"
+      cancel: "Cancel"
+      image: "Image"
+      link: "Link or HTML"
+      long_link: "Link"
+      short_link: "Short Link"
+      embed: "HTML"
+      custom_dimensions: "Set custom dimensions"
+      format: "Format:"
+      scale: "Scale:"
+      image_size: "Image will show standard layer at "
+      download: "Download"
+      short_url: "Short URL"
+      include_marker: "Include marker"
+      center_marker: "Center map on marker"
+      paste_html: "Paste HTML to embed in website"
+      view_larger_map: "View Larger Map"
+    key:
+      title: "Map Key"
+      tooltip: "Map Key"
+      tooltip_disabled: "Map Key available only for Standard layer"
     map:
+      zoom:
+        in: Zoom In
+        out: Zoom Out
+      locate:
+        title: Show My Location
+        popup: You are within {distance} {unit} of this point
       base:
         standard: Standard
         gridmap: Grid Map
         cycle_map: Cycle Map
         transport_map: Transport Map
         mapquest: MapQuest Open
-      overlays:
-        maplint: Maplint
+        hot: Humanitarian
+      layers:
+        header: Map Layers
+        notes: Map Notes
+        data: Map Data
+        grid: Grid Data
+        overlays: Enable overlays for troubleshooting the map
+        title: "Layers"
+      copyright: "© <a href='%{copyright_url}'>OpenStreetMap contributors</a>"
+      donate_link_text: "<a class='donate-attr' href='%{donate_url}'>Make a Donation</a>"
     site:
       edit_tooltip: Edit the map
       edit_disabled_tooltip: Zoom in to edit the map
-      edit_zoom_alert: You must zoom in to edit the map
-      history_tooltip: View edits for this area
-      history_disabled_tooltip: Zoom in to view edits for this area
-      history_zoom_alert: You must zoom in to view edits for this area
       createnote_tooltip: Add a note to the map
       createnote_disabled_tooltip: Zoom in to add a note to the map
-      createnote_zoom_alert: You must zoom in to add a note to the map
+      map_notes_zoom_in_tooltip: Zoom in to see map notes
+      map_data_zoom_in_tooltip: Zoom in to see map data
     notes:
       new:
-        intro: "In order to improve the map the information you enter is shown to other mappers, so please be as descriptive and precise as possible when moving the marker to the correct position and entering your note below."
+        intro: "Spotted a mistake or something missing? Let other mappers know so we can fix it. Move the marker to the correct position and type a note to explain the problem. (Please don't enter personal information or information from copyrighted maps or directory listings.)"
         add: Add Note
       show:
-        permalink: Permalink
         anonymous_warning: This note includes comments from anonymous users which should be independently verified.
-        opened_by: "created by <a href='%{user_url}'>%{user}</a> at %{time}"
-        opened_by_anonymous: "created by anonymous at %{time}"
-        commented_by: "comment from <a href='%{user_url}'>%{user}</a> at %{time}"
-        commented_by_anonymous: "comment from anonymous at %{time}"
-        closed_by: "resolved by <a href='%{user_url}'>%{user}</a> at %{time}"
-        closed_by_anonymous: "resolved by anonymous at %{time}"
-        reopened_by: "reactivated by <a href='%{user_url}'>%{user}</a> at %{time}"
-        reopened_by_anonymous: "reactivated by anonymous at %{time}"
         hide: Hide
         resolve: Resolve
         reactivate: Reactivate
         comment_and_resolve: Comment & Resolve
         comment: Comment
+    edit_help: Move the map and zoom in on a location you want to edit, then click here.
   redaction:
     edit:
       description: "Description"

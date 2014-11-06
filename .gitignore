@@ -1,7 +1,11 @@
 log
+config/piwik.yml
 public/assets
 public/attachments
+public/export
 tmp
 .DS_Store
 config/application.yml
 *~
+doc
+.vagrant

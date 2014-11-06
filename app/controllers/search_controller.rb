@@ -36,17 +36,17 @@ class SearchController < ApplicationController
     end
 
     if !PRIVATE_INSTANCE
-      if do_nodes
-        response.headers['Error'] = "Searching of nodes is currently unavailable"
-        render :nothing => true, :status => :service_unavailable
-        return false
-      end
+        if do_nodes
+          response.headers['Error'] = "Searching of nodes is currently unavailable"
+          render :text => "", :status => :service_unavailable
+          return false
+        end
 
-      unless value
-        response.headers['Error'] = "Searching for a key without value is currently unavailable"
-        render :nothing => true, :status => :service_unavailable
-        return false
-      end
+        unless value
+          response.headers['Error'] = "Searching for a key without value is currently unavailable"
+          render :text => "", :status => :service_unavailable
+          return false
+        end
     end
 
     # Matching for node tags table
