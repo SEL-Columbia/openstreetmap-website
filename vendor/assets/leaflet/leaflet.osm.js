@@ -61,7 +61,7 @@ L.OSM.HOT = L.OSM.TileLayer.extend({
 L.OSM.GridMap = L.OSM.TileLayer.extend({
   options: {
     url: OSM.GRIDMAPS_TILE_URL,
-    maxZoom: 17,
+    maxZoom: 20,
   }
 });
 

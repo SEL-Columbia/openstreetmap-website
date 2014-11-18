@@ -96,7 +96,7 @@ defaults: &defaults
 development:
   <<: *defaults
   private_instance: true
-  gridmaps_tile_url:  "http://192.168.33.80/tilestache/pln/{z}/{x}/{y}.png"
+  gridmaps_tile_url:  "http://192.168.33.80:20008/tile/gridmaps/{z}/{x}/{y}.png"
 
 production:
   <<: *defaults

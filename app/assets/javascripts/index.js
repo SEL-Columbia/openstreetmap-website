@@ -136,6 +136,11 @@ $(document).ready(function () {
     if (params.layers.indexOf(map.dataLayer.options.code) >= 0) {
       map.addLayer(map.dataLayer);
     }
+
+    if (params.layers.indexOf(map.gridLayer.options.code) >= 0) {
+      map.addLayer(map.gridLayer);
+    }
+
   }
 
   $('.leaflet-control .control-button').tooltip({placement: 'left', container: 'body'});

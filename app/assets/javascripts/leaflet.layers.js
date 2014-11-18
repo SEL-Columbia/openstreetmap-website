@@ -94,6 +94,7 @@ L.OSM.layers = function(options) {
         layers.forEach(function(other) {
           if (other === layer) {
             map.addLayer(other);
+            other.bringToBack();
           } else {
             map.removeLayer(other);
           }
