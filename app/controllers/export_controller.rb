@@ -53,22 +53,23 @@ class ExportController < ApplicationController
       mapper = OSM::Export::KML.new(tmp_outfilename)
  
       # Use if we want to retrieve map xml from alternative URL (via cgimap for speed)
-      # uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
+      uri = URI.parse(SERVER_MAP_URL + "/api/#{API_VERSION}/map?bbox=#{bbox}")
       # 
       ## handle exception?  
-      # map_osm_response = Net::HTTP.get_response(uri)
+      map_osm_response = Net::HTTP.get_response(uri)
 
-      # File.open(tmp_osmfilename,'w') do |f|
-      #   f.write map_osm_response.body
-      #   f.close
-      # end
+      File.open(tmp_osmfilename,'w') do |f|
+        f.write map_osm_response.body
+        f.close
+      end
 
       mapper.instance_eval(File.read(rulefilename), rulefilename)
       
-      doc = map_xml(bbox)
+      # Use to retrieve the map xml from this ruby/rails app 
+      # doc = map_xml(bbox)
       # write to file for now to be compatible with osmlib export api
       # tmp_osmfile = File.open(tmp_osmfilename, "w")
-      doc.save(tmp_osmfilename, :indent => true)
+      # doc.save(tmp_osmfilename, :indent => true)
       # tmp_osmfile.close 
 
       parser = OSM::Export::Parser.new(tmp_osmfilename, mapper)
