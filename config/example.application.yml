@@ -1,6 +1,6 @@
 defaults: &defaults
   # The server URL
-  server_url: "@server_url"
+  server_url: "www.openstreetmap.org"
   # The generator
   generator: "OpenStreetMap server"
   copyright_owner: "@copywright_owner"
@@ -23,11 +23,11 @@ defaults: &defaults
   #   :gpx_offline - gpx storage offline
   status: :online
   # The maximum area you're allowed to request, in square degrees
-  max_request_area: 10.0
+  max_request_area: 0.25 # at least 10 in prod
   # Number of GPS trace/trackpoints returned per-page
   tracepoints_per_page: 5000
   # Maximum number of nodes that will be returned by the api in a map request
-  max_number_of_nodes: 100000
+  max_number_of_nodes: 50000 # 100000 in prod
   # Maximum number of nodes that can be in a way (checked on save)
   max_number_of_way_nodes: 2000
   # The maximum area you're allowed to request notes from, in square degrees
@@ -39,7 +39,7 @@ defaults: &defaults
   # Timeout for API calls in seconds
   api_timeout: 300
   # Timeout for web pages in seconds
-  web_timeout: 300
+  web_timeout: 30 # 300 in prod
   # Periods (in hours) which are allowed for user blocks
   user_block_periods: [0, 1, 3, 6, 12, 24, 48, 96]
   # Rate limit for message sending
