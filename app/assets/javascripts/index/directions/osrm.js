@@ -28,25 +28,32 @@ function OSRMEngine() {
         'javascripts.directions.instructions.start',            // 14
         'javascripts.directions.instructions.destination',      // 15
         'javascripts.directions.instructions.against_oneway',   // 16
-        'javascripts.directions.instructions.end_oneway'        // 17
+        'javascripts.directions.instructions.end_oneway',       // 17
+        'javascripts.directions.instructions.ferry'             // 18
       ];
 
-      var url = document.location.protocol + "//router.project-osrm.org/viaroute?z=14&output=json&instructions=true";
+      var params = [
+        { name: "z", value: "14" },
+        { name: "output", value: "json" },
+        { name: "instructions", value: true }
+      ];
 
       for (var i = 0; i < points.length; i++) {
-        url += "&loc=" + points[i].lat + ',' + points[i].lng;
+        params.push({ name: "loc", value: points[i].lat + "," + points[i].lng });
+
         if (hintData && previousPoints && previousPoints[i].equals(points[i])) {
-          url += "&hint=" + hintData.locations[i];
+          params.push({ name: "hint", value: hintData.locations[i] });
         }
       }
 
       if (hintData && hintData.checksum) {
-        url += "&checksum=" + hintData.checksum;
+        params.push({ name: "checksum", value: hintData.checksum });
       }
 
       return $.ajax({
-        url: url,
-        dataType: 'json',
+        url: document.location.protocol + "//router.project-osrm.org/viaroute",
+        data: params,
+        dataType: "json",
         success: function (data) {
           if (data.status === 207)
             return callback(true);
@@ -63,6 +70,10 @@ function OSRMEngine() {
             var s = data.route_instructions[i];
             var linesegend;
             var instCodes = s[0].split('-');
+            if (s[8] === 2) {
+              /* indicates a ferry in car routing mode, see https://github.com/Project-OSRM/osrm-backend/blob/6cbbd1e5a1b441eb27055f56956e1bac14832a58/profiles/car.lua#L151 */
+              instCodes = ["18"];
+            }
             var instText = "<b>" + (i + 1) + ".</b> ";
             var name = s[1] ? "<b>" + s[1] + "</b>" : I18n.t('javascripts.directions.instructions.unnamed');
             if (instCodes[0] === "11" && instCodes[1]) {
@@ -75,15 +86,18 @@ function OSRMEngine() {
             } else {
               linesegend = s[3] + 1;
             }
-            steps.push([line[s[3]], s[0].split('-')[0], instText, s[2], line.slice(s[3], linesegend)]);
+            steps.push([line[s[3]], instCodes[0], instText, s[2], line.slice(s[3], linesegend)]);
           }
 
-          callback(null, {
+          callback(false, {
             line: line,
             steps: steps,
             distance: data.route_summary.total_distance,
             time: data.route_summary.total_time
           });
+        },
+        error: function () {
+          callback(true);
         }
       });
     }
