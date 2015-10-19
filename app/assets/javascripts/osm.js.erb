@@ -1,3 +1,5 @@
+//= depend_on application.yml
+
 OSM = {
 <% if defined?(PIWIK) %>
   PIWIK:                 <%= PIWIK.to_json %>,
@@ -10,6 +12,13 @@ OSM = {
   MAX_NOTE_REQUEST_AREA: <%= MAX_NOTE_REQUEST_AREA.to_json %>,
   OVERPASS_URL:          <%= OVERPASS_URL.to_json %>,
   NOMINATIM_URL:         <%= NOMINATIM_URL.to_json %>,
+
+<% if defined?(MAPQUEST_KEY) %>
+  MAPQUEST_KEY:          <%= MAPQUEST_KEY.to_json %>,
+<% end %>
+<% if defined?(MAPZEN_VALHALLA_KEY) %>
+  MAPZEN_VALHALLA_KEY:   <%= MAPZEN_VALHALLA_KEY.to_json %>,
+<% end %>
 
   MARKER_GREEN:          <%= image_path("marker-green.png").to_json %>,
   MARKER_RED:            <%= image_path("marker-red.png").to_json %>,
