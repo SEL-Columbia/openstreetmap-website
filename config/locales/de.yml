@@ -18,6 +18,7 @@
 # Author: GerdP
 # Author: Grille chompa
 # Author: Holger
+# Author: HolgerJeromin
 # Author: Inkowik
 # Author: Jacobbraeutigam
 # Author: John07
@@ -25,13 +26,16 @@
 # Author: Katpatuka
 # Author: Kerosin
 # Author: Kghbln
+# Author: Malenki
 # Author: Markobr
 # Author: MarkusHD
 # Author: McDutchie
 # Author: Metalhead64
 # Author: Michi
 # Author: Mormegil
+# Author: P24
 # Author: Pill
+# Author: Predatorix
 # Author: Purodha
 # Author: Raymond
 # Author: Reneman
@@ -39,6 +43,7 @@
 # Author: Snocker15
 # Author: Str4nd
 # Author: Suriyaa Kudo
+# Author: Tehabe
 # Author: The Evil IP address
 # Author: Thomas Bohn
 # Author: Umherirrender
@@ -52,37 +57,37 @@ de:
     models:
       acl: Zugangskontrollliste
       changeset: Änderungssatz
-      changeset_tag: Änderungssatz-Tag
+      changeset_tag: Änderungssatz-Attribut
       country: Staat
       diary_comment: Blog-Kommentar
-      diary_entry: Blogeintrag
+      diary_entry: Blog-Eintrag
       friend: Freund
       language: Sprache
       message: Nachricht
       node: Knoten
-      node_tag: Knoten-Tag
-      notifier: Benachrichtigung
+      node_tag: Knoten-Attribut
+      notifier: Benachrichtiger
       old_node: Alter Knoten
-      old_node_tag: Alter Knoten-Tag
+      old_node_tag: Altes Knoten-Attribut
       old_relation: Alte Relation
-      old_relation_member: Altes Relation-Mitglied
-      old_relation_tag: Alter Relation-Tag
-      old_way: Alter Weg
-      old_way_node: Alter Weg-Knoten
-      old_way_tag: Alter Weg-Tag
+      old_relation_member: Altes Relations-Mitglied
+      old_relation_tag: Altes Relations-Attribut
+      old_way: Alte Linie
+      old_way_node: Alter Linien-Knoten
+      old_way_tag: Altes Linien-Attribut
       relation: Relation
-      relation_member: Relation-Mitglied
-      relation_tag: Relation-Tag
+      relation_member: Relations-Mitglied
+      relation_tag: Relations-Attribut
       session: Sitzung
       trace: Track
       tracepoint: Track-Punkt
-      tracetag: Track-Tag
+      tracetag: Track-Attribut
       user: Benutzer
       user_preference: Benutzer-Einstellungen
       user_token: Benutzer-Token
-      way: Weg
-      way_node: Weg-Knoten
-      way_tag: Weg-Tag
+      way: Linie
+      way_node: Linien-Knoten
+      way_tag: Linien-Attribut
     attributes:
       diary_comment:
         body: Text
@@ -119,7 +124,7 @@ de:
   printable_name:
     with_name_html: '%{name} (%{id})'
   editor:
-    default: Standard (derzeit %{name})
+    default: Voreinstellung (derzeit %{name})
     potlatch:
       name: Potlatch 1
       description: Potlatch 1 (im Browser eingebetteter Editor)
@@ -136,59 +141,60 @@ de:
     created: Erstellt
     closed: Geschlossen
     created_html: Erstellt <abbr title='%{title}'>vor %{time}</abbr>
-    closed_html: Geschlossen <abbr title='%{title}'>%{time}</abbr>
-    created_by_html: Erstellt <abbr title='%{title}'>%{time}</abbr> von %{user}
-    deleted_by_html: Gelöscht <abbr title='%{title}'>%{time}</abbr> von %{user}
+    closed_html: Geschlossen <abbr title='%{title}'>vor %{time}</abbr>
+    created_by_html: Erstellt <abbr title='%{title}'>vor %{time}</abbr> von %{user}
+    deleted_by_html: Gelöscht <abbr title='%{title}'>vor %{time}</abbr> von %{user}
     edited_by_html: Bearbeitet <abbr title='%{title}'>vor %{time}</abbr> von %{user}
     closed_by_html: Geschlossen <abbr title='%{title}'>vor %{time}</abbr> von %{user}
     version: Version
     in_changeset: Änderungssatz
-    anonymous: anonym
+    anonymous: Anonym
     no_comment: (kein Kommentar)
     part_of: Teil von
     download_xml: XML herunterladen
-    view_history: Chronik ansehen
-    view_details: Einzelheiten ansehen
+    view_history: Chronik anzeigen
+    view_details: Details anzeigen
     location: 'Standort:'
     changeset:
       title: 'Änderungssatz: %{id}'
       belongs_to: Autor
       node: Knoten (%{count})
       node_paginated: Knoten (%{x}–%{y} von %{count})
-      way: Wege (%{count})
-      way_paginated: Wege (%{x}–%{y} von %{count})
+      way: Linien (%{count})
+      way_paginated: Linien (%{x}–%{y} von %{count})
       relation: Relationen (%{count})
       relation_paginated: Relationen (%{x}–%{y} von %{count})
       comment: Kommentare (%{count})
-      hidden_commented_by: Versteckter Kommentar von %{user} <abbr title='%{exact_time}'>vor
+      hidden_commented_by: Versteckter Diskussionsbeitrag von %{user} <abbr title='%{exact_time}'>vor
         %{when}</abbr>
-      commented_by: Kommentar von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
+      commented_by: Diskussionsbeitrag von %{user} <abbr title='%{exact_time}'>vor
+        %{when}</abbr>
       changesetxml: Änderungssatz-XML
       osmchangexml: osmChange-XML
       feed:
         title: 'Änderungssatz: %{id}'
         title_comment: Änderungssatz %{id} - %{comment}
-      join_discussion: Melde dich an, um der Diskussion beizutreten
+      join_discussion: Anmelden, um mitzudiskutieren
       discussion: Diskussion
     node:
       title: 'Knoten: %{name}'
-      history_title: 'Knotenchronik: %{name}'
+      history_title: 'Chronik des Knotens: %{name}'
     way:
-      title: 'Weg: %{name}'
-      history_title: 'Wegechronik: %{name}'
+      title: 'Linie: %{name}'
+      history_title: 'Chronik der Linie: %{name}'
       nodes: Knoten
       also_part_of:
-        one: Teil des Weges %{related_ways}
-        other: Teil der Wege %{related_ways}
+        one: Teil der Linie %{related_ways}
+        other: Teil der Linien %{related_ways}
     relation:
       title: 'Relation: %{name}'
-      history_title: 'Relationschronik: %{name}'
+      history_title: 'Chronik der Relation: %{name}'
       members: Mitglieder
     relation_member:
       entry_role: '%{type} %{name} als %{role}'
       type:
         node: Knoten
-        way: Weg
+        way: Linie
         relation: Relation
     containing_relation:
       entry: Relation %{relation_name}
@@ -197,7 +203,7 @@ de:
       sorry: '%{type} mit der Nummer %{id} konnte leider nicht gefunden werden.'
       type:
         node: Der Knoten
-        way: Der Weg
+        way: Die Linie
         relation: Die Relation
         changeset: Der Änderungssatz
         note: Hinweis
@@ -206,17 +212,17 @@ de:
         %{id} abzurufen.
       type:
         node: den Knoten
-        way: den Weg
+        way: die Linie
         relation: die Relation
         changeset: den Änderungssatz
         note: Hinweis
     redacted:
-      redaction: Ausblendung %{id}
-      message_html: 'Version %{version} diese%{type} kann nicht angezeigt werden.
-        Weitere Informationen sind hier angegeben: %{redaction_link}.'
+      redaction: Redigierung %{id}
+      message_html: 'Version %{version} diese%{type} kann nicht angezeigt werden,
+        da hier redigiert wurde. Weitere Informationen gibt es hier: %{redaction_link}.'
       type:
         node: s Knotens
-        way: s Wegs
+        way: r Linie
         relation: r Relation
     start_rjs:
       feature_warning: Laden von %{num_features} Funktionen, was deinen Browser langsam
@@ -224,12 +230,12 @@ de:
       load_data: Daten laden
       loading: Lade …
     tag_details:
-      tags: Tags
+      tags: Attribute
       wiki_link:
-        key: Erläuterungsseite für das %{key}-Tag
-        tag: Erläuterungsseite für das %{key}=%{value}-Tag
+        key: Die Wiki-Erläuterungsseite für den Schlüssel %{key}
+        tag: Die Wiki-Erläuterungsseite für das Attribut %{key}=%{value}
       wikidata_link: Das Objekt %{page} auf Wikidata
-      wikipedia_link: Artikel zu %{page} in der Wikipedia
+      wikipedia_link: Der Artikel zu %{page} in der Wikipedia
       telephone_link: '%{phone_number} anrufen'
     note:
       title: 'Kartenfehler: %{id}'
@@ -239,21 +245,21 @@ de:
       closed_title: Erledigter Kartenfehler Nr. %{note_name}
       hidden_title: Versteckter Kartenfehler Nr. %{note_name}
       open_by: Erstellt von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
-      open_by_anonymous: Erstellt von anonym <abbr title='%{exact_time}'>vor %{when}</abbr>
+      open_by_anonymous: Erstellt von Anonym <abbr title='%{exact_time}'>vor %{when}</abbr>
       commented_by: Kommentar von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
-      commented_by_anonymous: Kommentar von anonym <abbr title='%{exact_time}'>vor
+      commented_by_anonymous: Kommentar von Anonym <abbr title='%{exact_time}'>vor
         %{when}</abbr>
       closed_by: Erledigt von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
-      closed_by_anonymous: Erledigt von anonym <abbr title='%{exact_time}'>vor %{when}</abbr>
+      closed_by_anonymous: Erledigt von Anonym <abbr title='%{exact_time}'>vor %{when}</abbr>
       reopened_by: Reaktiviert von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
-      reopened_by_anonymous: Reaktiviert von anonym <abbr title='%{exact_time}'>vor
+      reopened_by_anonymous: Reaktiviert von Anonym <abbr title='%{exact_time}'>vor
         %{when}</abbr>
       hidden_by: Versteckt von %{user} <abbr title='%{exact_time}'>vor %{when}</abbr>
     query:
       title: Objektabfrage
       introduction: Klicke auf die Karte, um benachbarte Objekte zu finden.
       nearby: Objekte in der Nähe
-      enclosing: Einschließende Objekte
+      enclosing: Umschließende Objekte
   changeset:
     changeset_paging_nav:
       showing_page: Seite %{page}
@@ -261,8 +267,8 @@ de:
       previous: « Vorige
     changeset:
       anonymous: Anonym
-      no_edits: (keine Bearbeitung)
-      view_changeset_details: Details des Änderungssatzes
+      no_edits: (keine Bearbeitungen)
+      view_changeset_details: Details des Änderungssatzes anzeigen
     changesets:
       id: ID
       saved_at: Gespeichert am
@@ -282,26 +288,27 @@ de:
       no_more_user: Keine weiteren Änderungssätze von diesem Benutzer.
       load_more: Mehr laden
     timeout:
-      sorry: Es hat leider zu lange gedauert, die von dir angeforderten Änderungssätze
+      sorry: Entschuldigung, es hat leider zu lange gedauert, die angeforderten Änderungssätze
         abzurufen.
     rss:
       title_all: Diskussion zum OpenStreetMap-Änderungssatz
       title_particular: Diskussion zum OpenStreetMap-Änderungssatz Nr. %{changeset_id}
-      comment: Neuer Kommentar zum Änderungssatz Nr. %{changeset_id} von %{author}
+      comment: Neuer Diskussionsbeitrag zum Änderungssatz Nr. %{changeset_id} von
+        %{author}
       commented_at_html: vor %{when} aktualisiert
       commented_at_by_html: vor %{when} durch %{user} aktualisiert
       full: Vollständige Diskussion
   diary_entry:
     new:
-      title: Selbst Bloggen
+      title: Neuer Blog-Eintrag
       publish_button: Veröffentlichen
     list:
-      title: Blogs
-      title_friends: Blogs meiner Freunde
+      title: Benutzer-Blogs
+      title_friends: Blogs deiner Freunde
       title_nearby: Blogs von Nutzern in der Nähe
       user_title: Blog von %{user}
-      in_language_title: Blogeinträge in %{language}
-      new: Selbst Bloggen
+      in_language_title: Blog-Einträge in %{language}
+      new: Neuer Blog-Eintrag
       new_title: Blogeintrag erstellen
       no_entries: Dieser Benutzer hat noch kein Blog
       recent_entries: Neueste Einträge
@@ -448,7 +455,7 @@ de:
           terminal: Terminal
         amenity:
           animal_shelter: Tierheim
-          arts_centre: Kulturzentrum
+          arts_centre: Kunstzentrum
           atm: Geldautomat
           bank: Bank
           bar: Bar
@@ -472,7 +479,7 @@ de:
           clinic: Krankenhaus
           clock: Uhr
           college: Hochschule
-          community_centre: Gemeindezentrum
+          community_centre: Gemeinschaftszentrum
           courthouse: Gericht
           crematorium: Krematorium
           dentist: Zahnarzt
@@ -515,7 +522,7 @@ de:
           post_office: Postamt
           preschool: Vorschule
           prison: Gefängnis
-          pub: Pub
+          pub: Kneipe
           public_building: Öffentliches Gebäude
           reception_area: Empfangsbereich
           recycling: Recycling-Center
@@ -539,7 +546,7 @@ de:
           university: Universität
           vending_machine: Selbstbedienungsautomat
           veterinary: Tierarzt
-          village_hall: Gemeindeamt
+          village_hall: Gemeindezentrum
           waste_basket: Mülleimer
           waste_disposal: Abfallentsorgung
           youth_centre: Jugendzentrum
@@ -573,7 +580,7 @@ de:
           landing_site: Notlandeplatz
           phone: Notrufsäule
         highway:
-          abandoned: Verlassene Schnellstraße
+          abandoned: Aufgegebene Straße
           bridleway: Reitweg
           bus_guideway: Busspur
           bus_stop: Bushaltestelle
@@ -605,8 +612,8 @@ de:
           speed_camera: Blitzer
           steps: Treppe
           street_lamp: Straßenlaterne
-          tertiary: Gemeindestraße
-          tertiary_link: Tertiärstraße-Auffahrt
+          tertiary: Hauptstraße
+          tertiary_link: Hauptstraße-Auffahrt
           track: Feldweg
           traffic_signals: Lichtzeichenanlage
           trail: Pfad
@@ -626,7 +633,7 @@ de:
           city_gate: Stadttor
           citywalls: Stadtmauern
           fort: Fort
-          heritage: Bauerbe
+          heritage: Denkmalschutz
           house: Historisches Haus
           icon: Symbol
           manor: Gutshaus
@@ -646,26 +653,26 @@ de:
         landuse:
           allotments: Kleingärten
           basin: Becken
-          brownfield: Brache
+          brownfield: Brachland
           cemetery: Friedhof
           commercial: Gewerbegebiet
           conservation: Naturschutzgebiet
           construction: Baustelle
           farm: Bauernhof
           farmland: Acker
-          farmyard: Bauernhof
+          farmyard: landwirtschaftliche Betriebsfläche
           forest: Wald
           garages: Garagen
           grass: Wiese
-          greenfield: unerschlossene Fläche
+          greenfield: unerschlossenes Bauland
           industrial: Industriegebiet
           landfill: Deponie
           meadow: Wiese
           military: Militärgebiet
           mine: Mine
-          orchard: Obstgarten
+          orchard: Obstplantage
           quarry: Steinbruch
-          railway: Bahnkörper
+          railway: Bahngelände
           recreation_ground: Erholungsgebiet
           reservoir: Reservoir
           reservoir_watershed: Wassereinzugsgebiet
@@ -673,7 +680,7 @@ de:
           retail: Einzelhandel
           road: Straßenfläche
           village_green: Dorfwiese (brit.)
-          vineyard: Weingut
+          vineyard: Weinberg
           "yes": Bodennutzung
         leisure:
           beach_resort: Strandbad
@@ -683,10 +690,10 @@ de:
           dog_park: Hundepark
           fishing: Fischereigrund
           fitness_centre: Fitnessstudio
-          fitness_station: Fitnessstudio
+          fitness_station: Freiluft-Fitnesseinrichtung
           garden: Garten
           golf_course: Golfplatz
-          horse_riding: Reiten
+          horse_riding: Reitanlage
           ice_rink: Eislaufplatz
           marina: Sporthafen
           miniature_golf: Minigolf
@@ -766,7 +773,7 @@ de:
           insurance: Krankenversicherungsbüro
           lawyer: Rechtsanwalt
           ngo: NGO
-          telecommunication: Postamt
+          telecommunication: Telekommunikationsbüro
           travel_agent: Reisebüro
           "yes": Büro
         place:
@@ -798,13 +805,13 @@ de:
           village: Dorf
           "yes": Ort
         railway:
-          abandoned: Aufgelassene Bahnstrecke
+          abandoned: Aufgegebene Bahnstrecke
           construction: Eisenbahn im Bau
           disused: Aufgelassene Bahnstrecke
           disused_station: Aufgelassener Bahnhof
           funicular: Standseilbahn
           halt: Haltepunkt
-          historic_station: Ehemaliger Bahnhof
+          historic_station: Historischer Bahnhof
           junction: Bahnknoten
           level_crossing: Eisenbahnkreuzung
           light_rail: Stadtbahn
@@ -860,7 +867,7 @@ de:
           funeral_directors: Bestattungsunternehmen
           furniture: Möbelgeschäft
           gallery: Galerie
-          garden_centre: Garten-Center
+          garden_centre: Gartenzentrum
           general: Gemischtwarenladen
           gift: Geschenkeladen
           greengrocer: Obst- und Gemüsehändler
@@ -877,10 +884,10 @@ de:
           mobile_phone: Handygeschäft
           motorcycle: Motorradgeschäft
           music: Musikladen
-          newsagent: Zeitschriftenladen
+          newsagent: Zeitungsladen
           optician: Optiker
           organic: Bio-Laden
-          outdoor: Außenbekleidungsladen
+          outdoor: Outdoor-Ausrüster
           pet: Tierhandlung
           pharmacy: Apotheke
           photo: Fotoladen
@@ -899,7 +906,7 @@ de:
           "yes": Geschäft
         tourism:
           alpine_hut: Berghütte
-          apartment: Apartment
+          apartment: Ferienwohnung
           artwork: Kunstwerk
           attraction: Sehenswürdigkeit
           bed_and_breakfast: Bed and Breakfast
@@ -1150,13 +1157,14 @@ de:
         ein paar davon, die nützlich sein dürften.
       editor_html: Ein <strong>Editor</strong> ist ein Programm oder eine Webseite,
         mit der man die Karte bearbeiten kann.
-      node_html: Ein <strong>Node</strong> (Knoten) in OSM ist ein Punkt auf der Karte,
-        z.B. ein Restaurant oder ein Baum.
-      way_html: Ein <strong>Way</strong> ("Weg") in OSM ist eine Linie oder Fläche
-        wie z.B. eine Straße, ein Weg, ein Fluss oder ein Gebäude.
-      tag_html: |-
-        Ein <strong>tag</strong> ist eine Eigenschaft, die man einem Objekt zuweist. Z.B. der Name eines Restaurants
-        oder die maximal erlaubte Geschwindigkeit auf einer Straße.
+      node_html: Ein <strong>Node</strong> ("Knoten") in OSM ist ein Punkt auf der
+        Karte, z.B. ein Restaurant oder ein Baum.
+      way_html: Ein <strong>Way</strong> ("Weg") in OSM ist eine offene Linie wie
+        z.B. eine Straße, ein Weg, ein Fluss oder bildet eine geschlossene Fläche,
+        z.B. ein Gebäude.
+      tag_html: Ein <strong>tag</strong> ("Attribut") ist eine Eigenschaft, die man
+        einem Objekt zuweist. Z.B. der Name eines Restaurants oder die maximal erlaubte
+        Geschwindigkeit auf einer Straße.
     rules:
       title: Regeln!
       paragraph_1_html: "OpenStreetMap hat nur wenige formale Regeln, aber wir erwarten,
@@ -1380,18 +1388,19 @@ de:
     changeset_comment_notification:
       greeting: Hallo,
       commented:
-        subject_own: '[OpenStreetMap] %{commenter} hat zu einem deiner Änderungssätze
-          kommentiert'
+        subject_own: '[OpenStreetMap] %{commenter} hat einen deiner Änderungssätze
+          diskutiert'
         subject_other: '[OpenStreetMap] %{commenter} hat zu einem Änderungssatz kommentiert,
           an dem du interessiert bist'
-        your_changeset: '%{commenter} hinterließ einen Kommentar zu einem deiner Änderungssätze,
-          erstellt am %{time}'
-        commented_changeset: '%{commenter} hinterließ einen Kommentar zu einem Kartenänderungssatz,
-          den du beobachtest, erstellt von %{changeset_author} am %{time}'
-        partial_changeset_with_comment: mit dem Kommentar „%{changeset_comment}“
+        your_changeset: '%{commenter} hinterließ einen Diskussionsbeitrag zu einem
+          deiner Änderungssätze, erstellt am %{time}'
+        commented_changeset: '%{commenter} hinterließ einen Diskussionbeitrag zu einem
+          Kartenänderungssatz, den du beobachtest, erstellt von %{changeset_author}
+          am %{time}'
+        partial_changeset_with_comment: mit der Bemerkung „%{changeset_comment}“
         partial_changeset_without_comment: ohne Kommentar
-      details: Weitere Einzelheiten über den Änderungssatz können gefunden werden
-        unter %{url}.
+      details: Weitere Details über den Änderungssatz können gefunden werden unter
+        %{url}.
   message:
     inbox:
       title: Posteingang
@@ -1490,8 +1499,8 @@ de:
         den Flash Player von Adobe.com herunter</a>. <a href="http://wiki.openstreetmap.org/wiki/DE:Editing">Einige
         andere Möglichkeiten</a>, um OpenStreetMap zu editieren, sind hier beschrieben.
       potlatch_unsaved_changes: Du hast deine Arbeit noch nicht gespeichert. (Um sie
-        in Potlach zu speichern, klicke auf eine leere Fläche bzw. deselektiere den
-        Weg oder Punkt, wenn du im Live-Modus editierst oder klicke auf Speichern,
+        in Potlach zu speichern, klicke auf eine leere Fläche bzw. deselektiere die
+        Linie oder den Knoten, wenn du im Live-Modus editierst oder klicke auf Speichern,
         wenn ein Speicherbutton vorhanden ist.)
       potlatch2_not_configured: Potlatch 2 wurde nicht konfiguriert - Bitte besuche
         http://wiki.openstreetmap.org/wiki/The_Rails_Port
@@ -1516,6 +1525,7 @@ de:
       table:
         entry:
           motorway: Autobahn
+          main_road: Hauptstraße
           trunk: Schnellstraße
           primary: Bundesstraße
           secondary: Landes-, Kreisstraße
@@ -1559,30 +1569,30 @@ de:
           cemetery: Friedhof
           allotments: Kleingartenanlage
           pitch: Spielfeld
-          centre: Sportplatz
+          centre: Sportzentrum
           reserve: Naturschutzgebiet
           military: Militärgebiet
           school:
           - Schule
           - Universität
-          building: Gebäude
+          building: Bedeutendes Gebäude
           station: Bahnhof
           summit:
           - Gipfel
           - Bergspitze
-          tunnel: Strichlierter Rand = Tunnel
-          bridge: Dicker Rand = Brücke
+          tunnel: Gestrichelter Rand = Tunnel
+          bridge: Schwarzer Rand = Brücke
           private: Privater Zugang
           destination: Nur für Anrainer
-          construction: Straße im Bau
+          construction: Straßen im Bau
     richtext_area:
       edit: Bearbeiten
       preview: Vorschau
     markdown_help:
       title_html: Interpretiert mit <a href="http://daringfireball.net/projects/markdown/">Markdown</a>
       headings: Überschriften
-      heading: Hauptüberschrift
-      subheading: Überschrift
+      heading: Überschrift
+      subheading: Zwischenüberschrift
       unordered: Aufzählung
       ordered: Nummerierte Liste
       first: Erstes Element
@@ -1594,13 +1604,13 @@ de:
       url: URL
   trace:
     visibility:
-      private: PRIVAT (werden nur als anonyme, unsortierte Punkte ohne Zeitangaben
+      private: Privat (werden nur als anonyme, unsortierte Punkte ohne Zeitangaben
         gezeigt)
-      public: ÖFFENTLICH (wird in der Trackliste angezeigt, jedoch nur als anonyme,
-        unsortierte Punktfolge ohne Zeitstempel)
-      trackable: VERFOLGBAR (wird in der Trackliste als anonyme, sortierte Punktfolge
+      public: Öffentlich (wird in der Trackliste angezeigt, jedoch nur als anonyme,
+        unsortierte Punktfolge)
+      trackable: Verfolgbar (wird in der Trackliste als anonyme, sortierte Punktfolge
         mit Zeitstempel angezeigt)
-      identifiable: IDENTIFIZIERBAR (wird in der Trackliste als identifizierbare,
+      identifiable: Identifizierbar (wird in der Trackliste als identifizierbare,
         sortierte Punktfolge mit Zeitstempel angezeigt)
     create:
       upload_trace: Lade einen GPS-Track hoch
@@ -1623,20 +1633,20 @@ de:
       tags_help: durch Komma getrennt
       save_button: Speichern
       visibility: 'Sichtbarkeit:'
-      visibility_help: Was heißt das?
+      visibility_help: Was bedeutet das?
     trace_form:
       upload_gpx: 'GPX-Datei hochladen:'
       description: 'Beschreibung:'
       tags: 'Tags:'
-      tags_help: durch Komma ( , ) getrennt
+      tags_help: durch Komma getrennt
       visibility: 'Sichtbarkeit:'
-      visibility_help: Was heißt das?
+      visibility_help: Was bedeutet das?
       upload_button: Hochladen
       help: Hilfe
       help_url: http://wiki.openstreetmap.org/wiki/DE:Upload
     trace_header:
-      upload_trace: Lade einen GPS-Track hoch
-      see_all_traces: Alle GPS-Tracks
+      upload_trace: Lade einen Track hoch
+      see_all_traces: Alle Tracks ansehen
       see_your_traces: Meine Tracks ansehen
       traces_waiting:
         one: Du hast momentan %{count} Track in der Warteschlange. Bitte warte, bis
@@ -1651,7 +1661,7 @@ de:
       pending: WARTEND
       filename: 'Dateiname:'
       download: herunterladen
-      uploaded: 'Hochgeladen am:'
+      uploaded: 'Hochgeladen:'
       points: 'Punkte:'
       start_coordinates: 'Startkoordinate:'
       map: Karte
@@ -1671,9 +1681,9 @@ de:
     trace:
       pending: WARTEND
       count_points: '%{count} Punkte'
-      ago: '%{time_in_words_ago} her'
+      ago: vor %{time_in_words_ago}
       more: Details
-      trace_details: Details des GPS-Tracks anzeigen
+      trace_details: Details des Tracks anzeigen
       view_map: Karte anzeigen
       edit: bearbeiten
       edit_map: Karte bearbeiten
@@ -1911,16 +1921,6 @@ de:
       use external auth: Verwende alternativ eine Drittpartei zur Anmeldung
       auth no password: Mit Drittparteiauthentifikation ist kein Passwort erforderlich,
         jedoch können einige Extrawerkzeuge oder Server eines benötigen.
-      auth association: |-
-        <p>Deine ID ist noch nicht mit einem OpenStreetMap-Benutzerkonto verknüpft.</p>
-        <ul>
-          <li>Falls du neu auf OpenStreetMap bist, erstelle bitte mithilfe des unten stehenden Formulars ein neues Benutzerkonto.</li>
-          <li>
-            Falls du schon ein Benutzerkonto besitzt, kannst du dich bei deinem Konto
-            mit Benutzernamen und Passwort anmelden und anschließend das Benutzerkonto
-            in den Einstellungen mit deiner ID verknüpfen.
-          </li>
-        </ul>
       continue: Registrieren
       terms accepted: Vielen Dank, dass du den neuen Bedingungen für Mitwirkende zugestimmt
         hast!
@@ -1978,7 +1978,7 @@ de:
       ct status: 'Bedingungen für Mitwirkende:'
       ct undecided: Unentschlossen
       ct declined: Abgelehnt
-      ct accepted: Vor %{ago} akzeptiert
+      ct accepted: '%{ago} akzeptiert'
       latest edit: 'Letzte Änderung %{ago}:'
       email address: 'E-Mail-Adresse:'
       created from: 'erstellt aus:'
@@ -2017,9 +2017,9 @@ de:
       delete_user: Benutzer löschen
       confirm: Bestätigen
       friends_changesets: Änderungssätze deiner Freunde
-      friends_diaries: Tagebucheinträge deiner Freunde
+      friends_diaries: Blogs deiner Freunde
       nearby_changesets: Änderungssätze von Benutzern in der Nähe
-      nearby_diaries: Tagebucheinträge von Benutzern in der Nähe
+      nearby_diaries: Blogs von Benutzern in der Nähe
     popup:
       your location: Standort
       nearby mapper: Mapper in der Nähe
@@ -2161,6 +2161,15 @@ de:
       no_authorization_code: Kein Autorisierungscode
       unknown_signature_algorithm: Unbekannter Signaturalgorithmus
       invalid_scope: Ungültiger Bereich
+    auth_association:
+      heading: Deine ID ist noch nicht mit einem OpenStreetMap-Konto verknüpft.
+      option_1: |-
+        Falls du neu auf OpenStreetMap bist, erstelle bitte
+        mithilfe des unten stehenden Formulars ein neues Benutzerkonto.
+      option_2: |-
+        Falls du bereits ein Benutzerkonto hast, kannst du dich bei deinem Konto
+        mithilfe deines Benutzernamens und Passwortes anmelden und dann das Benutzerkonto
+        mit deiner ID in deinen Benutzereinstellungen verknüpfen.
   user_role:
     filter:
       not_an_administrator: Benutzerrollen können nur von Administratoren verwaltet
@@ -2297,14 +2306,14 @@ de:
         wird.
   note:
     description:
-      opened_at_html: vor %{when} erstellt
-      opened_at_by_html: vor %{when} von %{user} erstellt
-      commented_at_html: vor %{when} aktualisiert
-      commented_at_by_html: vor %{when} von %{user} aktualisiert
-      closed_at_html: vor %{when} gelöst
-      closed_at_by_html: vor %{when} von %{user} gelöst
-      reopened_at_html: vor %{when} reaktiviert
-      reopened_at_by_html: vor %{when} von %{user} reaktiviert
+      opened_at_html: '%{when} erstellt'
+      opened_at_by_html: '%{when} von %{user} erstellt'
+      commented_at_html: '%{when} aktualisiert'
+      commented_at_by_html: '%{when} von %{user} aktualisiert'
+      closed_at_html: '%{when} gelöst'
+      closed_at_by_html: '%{when} von %{user} gelöst'
+      reopened_at_html: '%{when} reaktiviert'
+      reopened_at_by_html: '%{when} von %{user} reaktiviert'
     rss:
       title: OpenStreetMap Hinweise
       description_area: Übersicht der gemeldeten, kommentierten oder geschlossen Hinweise/Fehler
@@ -2375,7 +2384,7 @@ de:
       donate_link_text: <a class='donate-attr' href='%{donate_url}'>Spenden</a>
     site:
       edit_tooltip: Karte bearbeiten
-      edit_disabled_tooltip: Zum Editieren muss eine höhere Zoomstufe gewählt werden
+      edit_disabled_tooltip: Zum Bearbeiten muss eine höhere Zoomstufe gewählt werden
       createnote_tooltip: Einen Hinweis/Fehler zu den Kartendaten melden
       createnote_disabled_tooltip: Zum Erstellen von Hinweisen muss eine höhere Zoomstufe
         gewählt werden
@@ -2416,7 +2425,7 @@ de:
         mapquest_car: Auto (MapQuest)
         mapquest_foot: Fuß (MapQuest)
         osrm_car: Auto (OSRM)
-        mapzen_bicycle: Rad (Mapzen)
+        mapzen_bicycle: Fahrrad (Mapzen)
         mapzen_car: Auto (Mapzen)
         mapzen_foot: Fuß (Mapzen)
       directions: 'Routenanweisungen:'
@@ -2435,20 +2444,20 @@ de:
         slight_left_without_exit: Leicht links auf %{name}
         via_point_without_exit: (über Punkt)
         follow_without_exit: '%{name} folgen'
-        roundabout_without_exit: Im Kreisverkehr nehme %{name}
+        roundabout_without_exit: Im Kreisverkehr nimm %{name}
         leave_roundabout_without_exit: Kreisverkehr verlassen – %{name}
         stay_roundabout_without_exit: Auf Kreisverkehr bleiben – %{name}
         start_without_exit: Starten beim Ende von %{name}
         destination_without_exit: Ziel erreicht
         against_oneway_without_exit: Gegen die Einbahnstraße gehen auf %{name}
         end_oneway_without_exit: Ende der Einbahnstraße auf %{name}
-        roundabout_with_exit: Beim Kreisverkehr nehme die Ausfahrt %{exit} auf %{name}
+        roundabout_with_exit: Beim Kreisverkehr nimm die Ausfahrt %{exit} auf %{name}
         unnamed: unbekannt
         courtesy: Routenanweisungen stammen von %{link}
       time: Zeit
     query:
       node: Knoten
-      way: Weg
+      way: Linie
       relation: Relation
       nothing_found: Keine Objekte gefunden
       error: 'Fehler beim Kontaktieren von %{server}: %{error}'

@@ -30,9 +30,7 @@ module Potlatch
 
     # Return numeric array
     def self.getarray(s)
-      getlong(s).times.collect do
-        getvalue(s)
-      end
+      Array.new(getlong(s)) { getvalue(s) }
     end
 
     # Return object/hash
@@ -181,7 +179,7 @@ module Potlatch
       presetcategory = ""
       #	StringIO.open(txt) do |file|
       File.open("#{Rails.root}/config/potlatch/presets.txt") do |file|
-        file.each_line do|line|
+        file.each_line do |line|
           t = line.chomp
           if t =~ %r{(\w+)/(\w+)}
             presettype = $1
@@ -193,7 +191,7 @@ module Potlatch
             kv = $2
             presetnames[presettype][presetcategory].push(pre)
             presets[pre] = {}
-            kv.split(",").each do|a|
+            kv.split(",").each do |a|
               presets[pre][$1] = $2 if a =~ /^(.+)=(.*)$/
             end
           end
@@ -245,17 +243,17 @@ module Potlatch
       # Read auto-complete
       autotags = { "point" => {}, "way" => {}, "POI" => {} }
       File.open("#{Rails.root}/config/potlatch/autocomplete.txt") do |file|
-        file.each_line do|line|
+        file.each_line do |line|
           next unless line.chomp =~ %r{^([\w:]+)/(\w+)\s+(.+)$}
 
           tag = $1
           type = $2
           values = $3
-          if values == "-"
-            autotags[type][tag] = []
-          else
-            autotags[type][tag] = values.split(",").sort.reverse
-          end
+          autotags[type][tag] = if values == "-"
+                                  []
+                                else
+                                  values.split(",").sort.reverse
+                                end
         end
       end
 

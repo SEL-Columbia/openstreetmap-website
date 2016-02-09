@@ -403,13 +403,11 @@ class UserController < ApplicationController
         friend.friend_user_id = @new_friend.id
         if @user.is_friends_with?(@new_friend)
           flash[:warning] = t "user.make_friend.already_a_friend", :name => @new_friend.display_name
+        elsif friend.save
+          flash[:notice] = t "user.make_friend.success", :name => @new_friend.display_name
+          Notifier.friend_notification(friend).deliver_now
         else
-          if friend.save
-            flash[:notice] = t "user.make_friend.success", :name => @new_friend.display_name
-            Notifier.friend_notification(friend).deliver_now
-          else
-            friend.add_error(t("user.make_friend.failed", :name => @new_friend.display_name))
-          end
+          friend.add_error(t("user.make_friend.failed", :name => @new_friend.display_name))
         end
 
         if params[:referer]
@@ -655,7 +653,7 @@ class UserController < ApplicationController
     user.display_name = params[:user][:display_name]
     user.new_email = params[:user][:new_email]
 
-    if params[:user][:pass_crypt].length > 0 || params[:user][:pass_crypt_confirmation].length > 0
+    unless params[:user][:pass_crypt].empty? && params[:user][:pass_crypt_confirmation].empty?
       user.pass_crypt = params[:user][:pass_crypt]
       user.pass_crypt_confirmation = params[:user][:pass_crypt_confirmation]
     end
@@ -682,11 +680,11 @@ class UserController < ApplicationController
     user.home_lat = params[:user][:home_lat]
     user.home_lon = params[:user][:home_lon]
 
-    if params[:user][:preferred_editor] == "default"
-      user.preferred_editor = nil
-    else
-      user.preferred_editor = params[:user][:preferred_editor]
-    end
+    user.preferred_editor = if params[:user][:preferred_editor] == "default"
+                              nil
+                            else
+                              params[:user][:preferred_editor]
+                            end
 
     if params[:user][:auth_provider].nil? || params[:user][:auth_provider].blank?
       user.auth_provider = nil
@@ -778,11 +776,11 @@ class UserController < ApplicationController
   ##
   # check signup acls
   def check_signup_allowed(email = nil)
-    if email.nil?
-      domain = nil
-    else
-      domain = email.split("@").last
-    end
+    domain = if email.nil?
+               nil
+             else
+               email.split("@").last
+             end
 
     if blocked = Acl.no_account_creation(request.remote_ip, domain)
       logger.info "Blocked signup from #{request.remote_ip} for #{email}"

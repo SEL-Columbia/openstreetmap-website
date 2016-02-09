@@ -140,13 +140,13 @@ class ApplicationController < ActionController::Base
     unless Authenticator.new(self, [:token]).allow?
       username, passwd = get_auth_data # parse from headers
       # authenticate per-scheme
-      if username.nil?
-        @user = nil # no authentication provided - perhaps first connect (client should retry after 401)
-      elsif username == "token"
-        @user = User.authenticate(:token => passwd) # preferred - random token for user from db, passed in basic auth
-      else
-        @user = User.authenticate(:username => username, :password => passwd) # basic auth
-      end
+      @user = if username.nil?
+                nil # no authentication provided - perhaps first connect (client should retry after 401)
+              elsif username == "token"
+                User.authenticate(:token => passwd) # preferred - random token for user from db, passed in basic auth
+              else
+                User.authenticate(:username => username, :password => passwd) # basic auth
+              end
     end
 
     # have we identified the user?
@@ -276,7 +276,7 @@ class ApplicationController < ActionController::Base
     response.headers["Error"] = message
 
     if request.headers["X-Error-Format"] &&
-       request.headers["X-Error-Format"].downcase == "xml"
+       request.headers["X-Error-Format"].casecmp("xml").zero?
       result = OSM::API.new.get_xml_doc
       result.root.name = "osmError"
       result.root << (XML::Node.new("status") << "#{Rack::Utils.status_code(status)} #{Rack::Utils::HTTP_STATUS_CODES[status]}")
@@ -337,7 +337,7 @@ class ApplicationController < ActionController::Base
   # or raises a suitable error. +method+ should be a symbol, e.g: :put or :get.
   def assert_method(method)
     ok = request.send((method.to_s.downcase + "?").to_sym)
-    fail OSM::APIBadMethodError.new(method) unless ok
+    raise OSM::APIBadMethodError.new(method) unless ok
   end
 
   ##
